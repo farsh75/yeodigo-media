@@ -6,7 +6,7 @@ queue/<id>.json 중 발행 시각이 지난 글을 스레드·인스타에 올�
 환경 변수 (GitHub Secrets / Variables)
   IG_ACCESS_TOKEN, IG_USER_ID            인스타 (시스템 사용자 토큰 + 인스타 비즈니스 계정 ID)
   THREADS_ACCESS_TOKEN, THREADS_USER_ID  스레드
-  PUBLISH_ENABLED                        "true"일 때만 실제로 올림. 그 외에는 무엇을 올릴지 출력만(드라이런)
+  PUBLISH_ENABLED                        true/false. 비어 있으면 publisher/config.json의 publish_enabled를 따름. 꺼져 있으면 드라이런
   MEDIA_BASE_URL                         이미지 공개 주소 앞부분 (예: https://raw.githubusercontent.com/farsh75/yeodigo-media/main)
   IG_GRAPH_VERSION (기본 v23.0), THREADS_GRAPH_VERSION (기본 v1.0)
   MAX_PER_RUN (기본 3)                   한 번에 올리는 최대 개수 (실수로 몰아 올리기 방지)
@@ -167,10 +167,22 @@ def due_posts(now: datetime) -> list[dict]:
     return sorted(out, key=lambda p: p["slot"])
 
 
+def is_live() -> bool:
+    """자동 게시 스위치. 환경 변수 PUBLISH_ENABLED(true/false)가 있으면 그걸, 없으면 publisher/config.json의 publish_enabled."""
+    env = os.environ.get("PUBLISH_ENABLED", "").strip().lower()
+    if env in ("true", "false"):
+        return env == "true"
+    cfg = ROOT / "publisher" / "config.json"
+    try:
+        return bool(json.loads(cfg.read_text(encoding="utf-8")).get("publish_enabled"))
+    except (OSError, ValueError):
+        return False
+
+
 def run(now: datetime | None = None, api: Api | None = None) -> list[dict]:
     now = now or datetime.now(timezone.utc)
     api = api or Api()
-    live = os.environ.get("PUBLISH_ENABLED", "").lower() == "true"
+    live = is_live()
     limit = int(os.environ.get("MAX_PER_RUN", "3"))
     RESULTS.mkdir(parents=True, exist_ok=True)
     done = []
