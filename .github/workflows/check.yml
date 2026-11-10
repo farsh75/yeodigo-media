@@ -1,0 +1,22 @@
+# 토큰 점검: 게시하지 않고 인스타·스레드 계정 접속만 확인한다. 게시기 파일이 바뀌면 자동, 또는 수동 실행.
+name: check-tokens
+on:
+  push:
+    paths: ["publisher/**", ".github/workflows/**"]
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 토큰 점검
+        working-directory: publisher
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+        run: python check.py

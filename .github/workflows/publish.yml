@@ -1,0 +1,44 @@
+# yeodigo-media 저장소의 .github/workflows/publish.yml 로 복사해서 쓴다.
+name: publish
+on:
+  schedule:
+    - cron: "7,22,37,52 * * * *"   # 15분마다 (정각 피함)
+  workflow_dispatch:
+    inputs:
+      only_id:
+        description: "이 글 하나만 바로 올리기 (시험 게시용, 비우면 시각 된 글 전부)"
+        required: false
+      live:
+        description: "only_id 글을 실제로 올림 (true). 비우면 드라이런"
+        required: false
+concurrency:
+  group: publish
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 게시
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          PUBLISH_ENABLED: ${{ (inputs.only_id != '' && inputs.live == 'true') && 'true' || vars.PUBLISH_ENABLED }}
+          MEDIA_BASE_URL: ${{ vars.MEDIA_BASE_URL || format('https://raw.githubusercontent.com/{0}/main', github.repository) }}
+          ONLY_ID: ${{ inputs.only_id }}
+        run: python publisher/publish.py
+      - name: 결과 저장
+        if: always()
+        run: |
+          git config user.name "yeodigo-publisher"
+          git config user.email "actions@users.noreply.github.com"
+          git add results || true
+          git diff --cached --quiet || (git commit -m "publish results" && git push)

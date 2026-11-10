@@ -1,0 +1,22 @@
+# yeodigo-media 저장소의 .github/workflows/refresh-tokens.yml 로 복사해서 쓴다.
+name: refresh-tokens
+on:
+  schedule:
+    - cron: "41 3 1,15 * *"   # 매달 1일·15일 (토큰 60일 만료 전에 여러 번 연장)
+  workflow_dispatch:
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 토큰 연장
+        working-directory: publisher
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_REPO: ${{ github.repository }}
+        run: python refresh_tokens.py
