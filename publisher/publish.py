@@ -203,6 +203,60 @@ def run(now: datetime | None = None, api: Api | None = None) -> list[dict]:
     return done
 
 
+def _git(*args: str) -> None:
+    import subprocess
+    subprocess.run(["git", *args], cwd=ROOT, check=False)
+
+
+def _save_results() -> None:
+    _git("add", "results")
+    import subprocess
+    if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode != 0:
+        _git("commit", "-m", "publish results")
+        _git("pull", "--rebase", "-q")
+        _git("push", "-q")
+
+
+def pending_slots() -> list[datetime]:
+    out = []
+    for f in QUEUE.glob("*.json"):
+        if (RESULTS / f.name).exists():
+            continue
+        try:
+            post = json.loads(f.read_text(encoding="utf-8"))
+            if post.get("approved_at"):
+                out.append(datetime.fromisoformat(post["slot"]))
+        except (ValueError, KeyError):
+            continue
+    return sorted(out)
+
+
+def watch(minutes: int, api: Api | None = None) -> list[dict]:
+    """GitHub 예약 실행(cron)은 몇 시간씩 늦거나 빠지는 일이 있어서, 동기화 작업이 내보낸 직후 이 모드로 한 번 띄운다.
+    정해진 시간(분) 동안 깨어 있으면서 시각이 된 글을 바로 올리고, 15분마다 저장소를 다시 받아 새로 들어온 글도 챙긴다.
+    남은 시간 안에 올릴 글이 없으면 일찍 끝낸다."""
+    import time
+    from datetime import timedelta
+    end = datetime.now(timezone.utc) + timedelta(minutes=minutes)
+    allres: list[dict] = []
+    while True:
+        _git("pull", "--rebase", "-q")
+        res = run(api=api)
+        if res:
+            allres += res
+            _save_results()
+        now = datetime.now(timezone.utc)
+        upcoming = [t for t in pending_slots() if t <= end]
+        if now >= end or not upcoming:
+            print(f"[대기 끝] 남은 글 {len(pending_slots())}개, 이번 창 안에 올릴 글 없음" if not upcoming else "[대기 끝] 시간 다 됨")
+            return allres
+        nxt = max(upcoming[0], now)
+        wait = min((nxt - now).total_seconds() + 20, 15 * 60, (end - now).total_seconds())
+        print(f"[대기] 다음 글 {upcoming[0].isoformat()} · {int(wait // 60)}분 뒤 다시 확인")
+        time.sleep(max(wait, 30))
+
+
 if __name__ == "__main__":
-    results = run()
+    w = os.environ.get("WATCH_MINUTES", "").strip()
+    results = watch(int(w)) if w.isdigit() and int(w) > 0 else run()
     sys.exit(1 if any(r["status"] == "failed" for r in results) else 0)

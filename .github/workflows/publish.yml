@@ -11,6 +11,9 @@ on:
       live:
         description: "only_id 글을 실제로 올림 (true). 비우면 드라이런"
         required: false
+      watch:
+        description: "이 시간(분) 동안 깨어 있으면서 시각 된 글을 바로 올림 (동기화 작업이 내보낸 뒤 띄움, 최대 340)"
+        required: false
 concurrency:
   group: publish
   cancel-in-progress: false
@@ -19,12 +22,16 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: git 설정
+        run: |
+          git config user.name "yeodigo-publisher"
+          git config user.email "actions@users.noreply.github.com"
       - name: 게시
         env:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
@@ -34,6 +41,7 @@ jobs:
           PUBLISH_ENABLED: ${{ (inputs.only_id != '' && inputs.live == 'true') && 'true' || vars.PUBLISH_ENABLED }}
           MEDIA_BASE_URL: ${{ vars.MEDIA_BASE_URL || format('https://raw.githubusercontent.com/{0}/main', github.repository) }}
           ONLY_ID: ${{ inputs.only_id }}
+          WATCH_MINUTES: ${{ inputs.watch }}
         run: python publisher/publish.py
       - name: 결과 저장
         if: always()
@@ -41,4 +49,4 @@ jobs:
           git config user.name "yeodigo-publisher"
           git config user.email "actions@users.noreply.github.com"
           git add results || true
-          git diff --cached --quiet || (git commit -m "publish results" && git push)
+          git diff --cached --quiet || (git commit -m "publish results" && git pull --rebase -q && git push)
