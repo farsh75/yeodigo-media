@@ -10,7 +10,7 @@ queue/<id>.json 중 발행 시각이 지난 글을 스레드·인스타에 올�
   MEDIA_BASE_URL                         이미지 공개 주소 앞부분 (예: https://raw.githubusercontent.com/farsh75/yeodigo-media/main)
   IG_GRAPH_VERSION (기본 v23.0), THREADS_GRAPH_VERSION (기본 v1.0)
   MAX_PER_RUN (기본 3)                   한 번에 올리는 최대 개수 (실수로 몰아 올리기 방지)
-  MIN_GAP_MINUTES (기본 40)              같은 채널에 연달아 올릴 때 최소 간격(분). 밀린 글이 쌓여 있어도 한 채널에
+  MIN_GAP_MINUTES (기본 60)              같은 채널에 연달아 올릴 때 최소 간격(분). 밀린 글이 쌓여 있어도 한 채널에
                                          한 번에 몰아 올리지 않고 이 간격을 두고 하나씩 (맥퀸님 2026-11-15)
   ONLY_ID                                이 id 하나만 (시험 게시용)
 
@@ -199,7 +199,7 @@ def last_posted() -> dict[str, datetime]:
 
 
 def gap_minutes() -> int:
-    return int(os.environ.get("MIN_GAP_MINUTES", "40"))
+    return int(os.environ.get("MIN_GAP_MINUTES", "60"))
 
 
 def run(now: datetime | None = None, api: Api | None = None) -> list[dict]:
