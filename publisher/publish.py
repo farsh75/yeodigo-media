@@ -10,6 +10,8 @@ queue/<id>.json 중 발행 시각이 지난 글을 스레드·인스타에 올�
   MEDIA_BASE_URL                         이미지 공개 주소 앞부분 (예: https://raw.githubusercontent.com/farsh75/yeodigo-media/main)
   IG_GRAPH_VERSION (기본 v23.0), THREADS_GRAPH_VERSION (기본 v1.0)
   MAX_PER_RUN (기본 3)                   한 번에 올리는 최대 개수 (실수로 몰아 올리기 방지)
+  MIN_GAP_MINUTES (기본 40)              같은 채널에 연달아 올릴 때 최소 간격(분). 밀린 글이 쌓여 있어도 한 채널에
+                                         한 번에 몰아 올리지 않고 이 간격을 두고 하나씩 (맥퀸님 2026-11-15)
   ONLY_ID                                이 id 하나만 (시험 게시용)
 
 queue/<id>.json 형식 (yeodigo_content export-queue가 만든다)
@@ -179,14 +181,46 @@ def is_live() -> bool:
         return False
 
 
+def last_posted() -> dict[str, datetime]:
+    """채널별 마지막 게시 시각 (results 파일의 at, 성공한 것만)."""
+    last: dict[str, datetime] = {}
+    for f in RESULTS.glob("*.json"):
+        try:
+            r = json.loads(f.read_text(encoding="utf-8"))
+            if r.get("status") != "published":
+                continue
+            t = datetime.fromisoformat(r["at"])
+        except (ValueError, KeyError, OSError):
+            continue
+        ch = r.get("channel", "")
+        if ch not in last or t > last[ch]:
+            last[ch] = t
+    return last
+
+
+def gap_minutes() -> int:
+    return int(os.environ.get("MIN_GAP_MINUTES", "40"))
+
+
 def run(now: datetime | None = None, api: Api | None = None) -> list[dict]:
+    from datetime import timedelta
     now = now or datetime.now(timezone.utc)
     api = api or Api()
     live = is_live()
     limit = int(os.environ.get("MAX_PER_RUN", "3"))
+    gap = timedelta(minutes=gap_minutes())
     RESULTS.mkdir(parents=True, exist_ok=True)
+    last = last_posted()
+    only = bool(os.environ.get("ONLY_ID", "").strip())
+    picked, used = [], set()
+    for post in due_posts(now):  # 채널마다 한 번에 1건, 그 채널 마지막 글에서 간격이 지난 경우만
+        ch = post["channel"]
+        if not only and (ch in used or (ch in last and now - last[ch] < gap)):
+            continue
+        picked.append(post)
+        used.add(ch)
     done = []
-    for post in due_posts(now)[:limit]:
+    for post in picked[:limit]:
         if not live:
             print(f"[드라이런] {post['id']} ({post['channel']}, {post['slot']}) 이미지 {len(post.get('images') or [])}장")
             continue
@@ -231,6 +265,13 @@ def pending_slots() -> list[datetime]:
     return sorted(out)
 
 
+def nxt_gap(now: datetime) -> datetime:
+    """간격 때문에 미룬 글을 다시 볼 시각: 가장 이른 채널의 '마지막 게시 + 간격'."""
+    from datetime import timedelta
+    ts = [t + timedelta(minutes=gap_minutes()) for t in last_posted().values()]
+    return min([t for t in ts if t > now] or [now])
+
+
 def watch(minutes: int, api: Api | None = None) -> list[dict]:
     """GitHub 예약 실행(cron)은 몇 시간씩 늦거나 빠지는 일이 있어서, 동기화 작업이 내보낸 직후 이 모드로 한 번 띄운다.
     정해진 시간(분) 동안 깨어 있으면서 시각이 된 글을 바로 올리고, 15분마다 저장소를 다시 받아 새로 들어온 글도 챙긴다.
@@ -246,7 +287,8 @@ def watch(minutes: int, api: Api | None = None) -> list[dict]:
             allres += res
             _save_results()
         now = datetime.now(timezone.utc)
-        upcoming = [t for t in pending_slots() if t <= end]
+        upcoming = [max(t, nxt_gap(now)) for t in pending_slots() if t <= end]
+        upcoming = sorted(t for t in upcoming if t <= end)
         if now >= end or not upcoming:
             print(f"[대기 끝] 남은 글 {len(pending_slots())}개, 이번 창 안에 올릴 글 없음" if not upcoming else "[대기 끝] 시간 다 됨")
             return allres
