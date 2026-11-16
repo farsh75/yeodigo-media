@@ -25,6 +25,8 @@ jobs:
     timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main   # 실행 시작 때의 최신 main (대기열에서 기다린 동안 쌓인 results까지)
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

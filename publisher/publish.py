@@ -300,5 +300,8 @@ def watch(minutes: int, api: Api | None = None) -> list[dict]:
 
 if __name__ == "__main__":
     w = os.environ.get("WATCH_MINUTES", "").strip()
+    # 2026-11-16 중복 게시 사고: 앞 실행이 끝나길 기다린 예약 실행이 '대기 시작 때' 커밋을 받아 와서
+    # 앞 실행이 방금 남긴 results를 못 보고 같은 글을 또 올렸다. 게시 전에 항상 최신 main을 받는다.
+    _git("pull", "--rebase", "-q")
     results = watch(int(w)) if w.isdigit() and int(w) > 0 else run()
     sys.exit(1 if any(r["status"] == "failed" for r in results) else 0)
