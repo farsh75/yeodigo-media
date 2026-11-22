@@ -2,6 +2,7 @@
  "id": "2026-11-17-b-instagram-1",
  "channel": "instagram",
  "at": "2026-11-17T04:24:33.321616+00:00",
- "status": "failed",
- "error": "HTTP 403 https://graph.facebook.com/v23.0/17841415761154146/media_publish: {\"error\":{\"message\":\"Application request limit reached\",\"code\":4,\"type\":\"OAuthException\",\"error_subcode\":2207051,\"is_transient\":false,\"error_user_msg\":\"Instagram은 커뮤니티를 보호하기 위해 특정 활동을 제한합니다. 이 조치가 실수라고 생각하는 경우 저희에게 알려주세요.\",\"error_user_title\":\"행동이 차단되었습니다\",\"fbtrace_id\":\"AjkVScPoxldRTJaALOJSZhv\"}}"
+ "status": "published",
+ "error": "HTTP 403 https://graph.facebook.com/v23.0/17841415761154146/media_publish: {\"error\":{\"message\":\"Application request limit reached\",\"code\":4,\"type\":\"OAuthException\",\"error_subcode\":2207051,\"is_transient\":false,\"error_user_msg\":\"Instagram은 커뮤니티를 보호하기 위해 특정 활동을 제한합니다. 이 조치가 실수라고 생각하는 경우 저희에게 알려주세요.\",\"error_user_title\":\"행동이 차단되었습니다\",\"fbtrace_id\":\"AjkVScPoxldRTJaALOJSZhv\"}}",
+ "note": "403(2207051)였지만 실제로 게시됨 — 2026-11-22 프로필로 확인"
 }

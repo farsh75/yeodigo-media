@@ -2,6 +2,7 @@
  "id": "2026-11-16-a-instagram-2",
  "channel": "instagram",
  "at": "2026-11-16T11:04:20.254669+00:00",
- "status": "failed",
- "error": "HTTP 403 https://graph.facebook.com/v23.0/17841415761154146/media_publish: {\"error\":{\"message\":\"Application request limit reached\",\"type\":\"OAuthException\",\"is_transient\":false,\"code\":4,\"error_subcode\":2207051,\"error_user_title\":\"\\ud589\\ub3d9\\uc774 \\ucc28\\ub2e8\\ub418\\uc5c8\\uc2b5\\ub2c8\\ub2e4\",\"error_user_msg\":\"Instagram\\uc740 \\ucee4\\ubba4\\ub2c8\\ud2f0\\ub97c \\ubcf4\\ud638\\ud558\\uae30 \\uc704\\ud574 \\ud2b9\\uc815 \\ud65c\\ub3d9\\uc744 \\uc81c\\ud55c\\ud569\\ub2c8\\ub2e4. \\uc774 \\uc870\\uce58\\uac00 \\uc2e4\\uc218\\ub77c\\uace0 \\uc0dd\\uac01\\ud558\\ub294 \\uacbd\\uc6b0 \\uc800\\ud76c\\uc5d0\\uac8c \\u"
+ "status": "published",
+ "error": "HTTP 403 https://graph.facebook.com/v23.0/17841415761154146/media_publish: {\"error\":{\"message\":\"Application request limit reached\",\"type\":\"OAuthException\",\"is_transient\":false,\"code\":4,\"error_subcode\":2207051,\"error_user_title\":\"\\ud589\\ub3d9\\uc774 \\ucc28\\ub2e8\\ub418\\uc5c8\\uc2b5\\ub2c8\\ub2e4\",\"error_user_msg\":\"Instagram\\uc740 \\ucee4\\ubba4\\ub2c8\\ud2f0\\ub97c \\ubcf4\\ud638\\ud558\\uae30 \\uc704\\ud574 \\ud2b9\\uc815 \\ud65c\\ub3d9\\uc744 \\uc81c\\ud55c\\ud569\\ub2c8\\ub2e4. \\uc774 \\uc870\\uce58\\uac00 \\uc2e4\\uc218\\ub77c\\uace0 \\uc0dd\\uac01\\ud558\\ub294 \\uacbd\\uc6b0 \\uc800\\ud76c\\uc5d0\\uac8c \\u",
+ "note": "403(2207051)였지만 실제로 게시됨 — 2026-11-22 프로필로 확인"
 }
