@@ -16,6 +16,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -27,14 +28,20 @@ SPECS, OUT = ROOT / "reels" / "specs", ROOT / "reels" / "out"
 FONTS = ROOT / "publisher" / "fonts"
 W, H, FPS = 1080, 1920, 30
 FADE = 0.3
+UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130 Safari/537.36 yeodigo-reels/1.0",
+      "Accept": "application/json, video/mp4, */*"}
 TRANS = ["fade", "smoothleft", "fade", "slideup", "fade", "smoothleft", "fade"]
 
 
 # ---------------- Pixabay ----------------
 def pixabay_videos(query: str, key: str, opener=urllib.request.urlopen) -> list[dict]:
     q = urllib.parse.urlencode({"key": key, "q": query, "per_page": 30, "safesearch": "true", "video_type": "film"})
-    with opener(f"https://pixabay.com/api/videos/?{q}", timeout=30) as r:
-        return json.loads(r.read().decode()).get("hits", [])
+    req = urllib.request.Request(f"https://pixabay.com/api/videos/?{q}", headers=UA)
+    try:
+        with opener(req, timeout=30) as r:
+            return json.loads(r.read().decode()).get("hits", [])
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f"Pixabay 검색 {e.code}: {e.read().decode(errors='replace')[:200]}") from None
 
 
 def pick(hits: list[dict], need_s: float, used: set[int]) -> dict | None:
@@ -59,7 +66,7 @@ def video_url(h: dict) -> str:
 
 
 def download(url: str, dest: Path, opener=urllib.request.urlopen) -> None:
-    req = urllib.request.Request(url, headers={"User-Agent": "yeodigo-reels/1.0"})
+    req = urllib.request.Request(url, headers=UA)
     with opener(req, timeout=120) as r, open(dest, "wb") as f:
         f.write(r.read())
 
