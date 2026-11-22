@@ -1,0 +1,55 @@
+{
+ "id": "2026-11-22-a-kyoto-tax",
+ "duration": 15.6,
+ "credits": [
+  {
+   "scene": 1,
+   "query": "kyoto",
+   "pixabay_id": 184370,
+   "page": "https://pixabay.com/videos/id-184370/",
+   "user": "Kanenori",
+   "tags": "five-story tower, crescent moon, night, kyoto, japan, thundercloud, landscape"
+  },
+  {
+   "scene": 2,
+   "query": "kyoto street",
+   "pixabay_id": 153086,
+   "page": "https://pixabay.com/videos/id-153086/",
+   "user": "Kanenori",
+   "tags": "snow, snowfall, pedestrian, old town, kyoto, five story pagoda, night view, japan"
+  },
+  {
+   "scene": 3,
+   "query": "kyoto temple",
+   "pixabay_id": 336514,
+   "page": "https://pixabay.com/videos/id-336514/",
+   "user": "Kanenori",
+   "tags": "historical buildings, kinkakuji temple, kyoto, winter, snow, pond, wind, sun, japan"
+  },
+  {
+   "scene": 4,
+   "query": "kyoto night",
+   "pixabay_id": 243931,
+   "page": "https://pixabay.com/videos/id-243931/",
+   "user": "Kanenori",
+   "tags": "river, woods, autumn, autumnal leaves, ever green, deciduous trees, sightseeing boat, arashiyama, kyoto, japan, landscape"
+  },
+  {
+   "scene": 5,
+   "query": "kyoto autumn",
+   "pixabay_id": 182475,
+   "page": "https://pixabay.com/videos/id-182475/",
+   "user": "Kanenori",
+   "tags": "night, old capital, cloud, kyoto, five storey tower, yasaka pagoda, light up, crescent moon, japan, landscape"
+  },
+  {
+   "scene": 6,
+   "query": "kyoto sunset",
+   "pixabay_id": 335699,
+   "page": "https://pixabay.com/videos/id-335699/",
+   "user": "Kanenori",
+   "tags": "historical buildings,, kinkakuji temple, kyoto, winter,, snow,, pond, japanese garden,, japan"
+  }
+ ],
+ "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"
+}
