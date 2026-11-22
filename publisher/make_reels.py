@@ -48,6 +48,19 @@ BAN = ("woman", "man", "girl", "boy", "people", "person", "face", "tourists", "c
        "bmw", "audi", "mercedes", "tesla", "logo", "brand", "advertising")
 
 
+def pixabay_photos(query: str, key: str, opener=urllib.request.urlopen) -> list[dict]:
+    """영상이 모자랄 때 쓰는 실사 사진(무료). 영상 hit과 같은 모양으로 맞춘다: duration 크게, videos 대신 image."""
+    q = urllib.parse.urlencode({"key": key, "q": query, "per_page": 40, "safesearch": "true", "image_type": "photo", "min_width": 1600})
+    req = urllib.request.Request(f"https://pixabay.com/api/?{q}", headers=UA)
+    with opener(req, timeout=30) as r:
+        hits = json.loads(r.read().decode()).get("hits", [])
+    for h in hits:
+        h["duration"], h["is_photo"] = 99, True
+        h["videos"] = {"large": {"url": h.get("largeImageURL") or h.get("webformatURL"), "width": h.get("imageWidth", 0), "height": h.get("imageHeight", 0),
+                                 "thumbnail": h.get("webformatURL") or h.get("previewURL")}}
+    return hits
+
+
 def candidates(hits: list[dict], need_s: float, used: set[int], place: list[str] | None = None, exclude: list[str] | None = None) -> list[dict]:
     """조건 맞는 영상을 좋은 순서로. 무료(pixabay.com)만 · 태그에 장소 이름 · 사람·차·브랜드 제외 · 충분히 긺."""
     def score(h):
@@ -232,7 +245,8 @@ def scene_clip(src: Path, overlay: Path, dur: float, out: Path, zoom_in: bool = 
     fc = (f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H}:(iw-{W})*{focus_x}:(ih-{H})/2,fps={FPS},"
           f"scale={W * 2}:{H * 2},zoompan=z='{z}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps={FPS},"
           f"eq=saturation=1.05:contrast=1.03[b];[b][1:v]overlay=0:0,format=yuv420p[v]")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{start:.2f}", "-t", f"{dur:.2f}", "-i", str(src), "-i", str(overlay),
+    inp = ["-loop", "1", "-framerate", str(FPS), "-t", f"{dur:.2f}", "-i", str(src)] if src.suffix == ".jpg" else ["-ss", f"{start:.2f}", "-t", f"{dur:.2f}", "-i", str(src)]
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *inp, "-i", str(overlay),
                     "-filter_complex", fc, "-map", "[v]", "-an", "-frames:v", str(n), "-c:v", "libx264", "-preset", "veryfast",
                     "-crf", "19", "-r", str(FPS), str(out)], check=True)
 
@@ -267,12 +281,19 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
             seg = d + (FADE if i < len(scenes) - 1 else 0)
             place = s.get("place", spec.get("place"))
             cands: list[dict] = []
-            for q in [s["query"]] + list(s.get("fallback") or []) + list(place or []):
+            photo_only = (s.get("media") or spec.get("media")) == "photo"  # 장소 영상이 없거나 안 맞는 곳(예: 보홀 해변)은 실사 사진으로
+            for q in ([] if photo_only else [s["query"]] + list(s.get("fallback") or []) + list(place or [])):
                 seen = {x["id"] for x in cands}
                 cands += [c for c in candidates(fetch(q, key), seg, used, place, spec.get("exclude")) if c["id"] not in seen]
                 if len(cands) >= 4:
                     break
-            h = by_id(int(s["pixabay_id"]), key) if s.get("pixabay_id") and fetch is pixabay_videos else (cands[0] if cands else None)
+            if not cands and fetch is pixabay_videos and spec.get("photos", True):  # 그 장소 영상이 없으면 같은 장소 실사 사진으로
+                for q in [s["query"]] + list(s.get("fallback") or []) + list(place or []):
+                    seen = {x["id"] for x in cands}
+                    cands += [c for c in candidates(pixabay_photos(q, key), seg, used, place, spec.get("exclude")) if c["id"] not in seen]
+                    if len(cands) >= 4:
+                        break
+            h = by_id(int(s["pixabay_id"]), key) if s.get("pixabay_id") and fetch is pixabay_videos and not s.get("photo") else (cands[0] if cands else None)
             start = 0.3
             if not h and pool:  # 그 장소 영상이 적으면(예: 보홀) 다른 도시 영상을 끌어오지 않고, 이미 쓴 같은 장소 영상의 다른 구간을 쓴다
                 h = min(pool, key=lambda x: reuse.get(x["id"], 0))
@@ -284,14 +305,14 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
                 pool.append(h)
             sheet_rows.append((s, ([h] + [c for c in cands if c["id"] != h["id"]])[:4], h["id"]))
             used.add(h["id"])
-            src = td / f"src{i}.mp4"
+            src = td / (f"src{i}.jpg" if h.get("is_photo") else f"src{i}.mp4")
             dl(video_url(h), src)
             ov = td / f"t{i}.png"
             text_layer(s["text"], s.get("sub", ""), ov, s.get("kicker", ""))
             c = td / f"c{i}.mp4"
             scene_clip(src, ov, seg, c, zoom_in=i % 2 == 0, focus_x=float(s.get("focus_x", 0.5)), start=start)
             clips.append(c)
-            credits.append({"scene": i + 1, "query": s["query"], "pixabay_id": h["id"], "page": h.get("pageURL"), "user": h.get("user"), "tags": h.get("tags")})
+            credits.append({"scene": i + 1, "query": s["query"], "pixabay_id": h["id"], "page": h.get("pageURL"), "user": h.get("user"), "tags": h.get("tags"), "kind": "photo" if h.get("is_photo") else "video"})
         OUT.mkdir(parents=True, exist_ok=True)
         out = OUT / f"{spec['id']}.mp4"
         join(clips, durs, out)
