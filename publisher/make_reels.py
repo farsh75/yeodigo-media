@@ -44,7 +44,7 @@ def pixabay_videos(query: str, key: str, opener=urllib.request.urlopen) -> list[
         raise RuntimeError(f"Pixabay 검색 {e.code}: {e.read().decode(errors='replace')[:200]}") from None
 
 
-def pick(hits: list[dict], need_s: float, used: set[int]) -> dict | None:
+def pick(hits: list[dict], need_s: float, used: set[int], place: list[str] | None = None) -> dict | None:
     """세로 영상 우선, 충분히 길고, 사람 얼굴이 주인공일 법한 것(people 태그) 피하고, 안 쓴 것."""
     def score(h):
         v = (h.get("videos") or {}).get("large") or (h.get("videos") or {}).get("medium") or {}
@@ -52,6 +52,8 @@ def pick(hits: list[dict], need_s: float, used: set[int]) -> dict | None:
         return ((hh > w) * 2 + (min(w, hh) >= 1080) + (h.get("likes", 0) > 20), h.get("downloads", 0))
     # 무료만 (맥퀸님 2026-11-22): Pixabay 자체 콘텐츠(pixabay.com 페이지)만. 유료 스톡(iStock 등 광고 결과)은 받지 않는다.
     hits = [h for h in hits if str(h.get("pageURL", "")).startswith("https://pixabay.com/")]
+    if place:  # 사실과 다른 장소 방지: 태그에 그 장소 이름이 있는 영상만 (교토 장면에 오사카성 X)
+        hits = [h for h in hits if any(p.lower() in str(h.get("tags", "")).lower() for p in place)]
     ok = [h for h in hits if h.get("id") not in used and (h.get("duration") or 0) >= need_s + 0.5
           and not any(t in (h.get("tags") or "") for t in ("woman", "man", "girl", "boy", "people", "person", "face"))]
     return max(ok, key=score) if ok else None
@@ -154,7 +156,7 @@ def join(clips: list[Path], durs: list[float], out: Path) -> None:
         parts.append(f"{prev}[{i}:v]xfade=transition={TRANS[(i - 1) % len(TRANS)]}:duration={FADE}:offset={t:.3f}{lab}")
         prev = lab
     parts.append(f"color=c=0xE8DCC4:s={W}x8:r={FPS}:d={total:.2f}[bar];{prev}[bar]overlay=x='-W+W*t/{total:.2f}':y=150:shortest=1[v]")
-    args += ["-filter_complex", ";".join(parts), "-map", "[v]", "-c:v", "libx264", "-preset", "medium", "-crf", "21",
+    args += ["-filter_complex", ";".join(parts), "-map", "[v]", "-c:v", "libx264", "-preset", "medium", "-crf", "24", "-maxrate", "6M", "-bufsize", "12M",
              "-pix_fmt", "yuv420p", "-r", str(FPS), "-movflags", "+faststart", str(out)]
     subprocess.run(args, check=True)
 
@@ -169,8 +171,9 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
         for i, (s, d) in enumerate(zip(scenes, durs)):
             seg = d + (FADE if i < len(scenes) - 1 else 0)
             h = None
-            for q in [s["query"]] + list(s.get("fallback") or []):
-                h = pick(fetch(q, key), seg, used)
+            place = s.get("place", spec.get("place"))
+            for q in [s["query"]] + list(s.get("fallback") or []) + list(place or []):
+                h = pick(fetch(q, key), seg, used, place)
                 if h:
                     break
             if not h:
