@@ -129,57 +129,98 @@ def _font(weight: str, size: int) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(str(FONTS / f"Pretendard-{weight}.otf"), size)
 
 
-def _wrap(draw, text: str, font, max_w: int) -> list[str]:
-    lines = []
+HL = (255, 206, 84, 255)   # 강조 글자색 (==숫자==) — 노을·눈·밤 어디서도 잘 보이는 따뜻한 노랑
+
+
+def _tokens(text: str) -> list[list[tuple[str, bool]]]:
+    """줄마다 [(낱말, 강조?)]. ==…== 안은 강조."""
+    out = []
     for para in text.split("\n"):
-        cur = ""
-        for word in para.split(" "):
-            t = (cur + " " + word).strip()
-            if draw.textlength(t, font=font) <= max_w or not cur:
-                cur = t
+        words, hl = [], False
+        for part in para.split("=="):
+            for w in part.split(" "):
+                if w:
+                    words.append((w, hl))
+            hl = not hl
+        # '==' 경계에서 띄어쓰기 없이 붙은 조각은 앞 낱말에 붙임 (예: ==8,000엔==이 → 8,000엔|이)
+        merged, raw = [], para.replace("==", "\0")
+        idx = 0
+        for w, h in words:
+            j = raw.find(w.replace("==", ""), idx) if w else idx
+            glued = merged and j > 0 and raw[j - 1] == "\0" and (j - 2 < 0 or raw[j - 2] != " ") and (len(raw) <= j - 1 or True)
+            if glued and j - 1 > 0 and raw[j - 2] != " ":
+                merged[-1].append((w, h))
             else:
+                merged.append([(w, h)])
+            idx = j + len(w)
+        out.append(merged)
+    return out
+
+
+def _layout(draw, text: str, font, max_w: int) -> list[list[list[tuple[str, bool]]]]:
+    """줄 → 낱말 묶음(붙은 조각 포함) 목록. 폭 넘으면 줄바꿈."""
+    sp = draw.textlength(" ", font=font)
+    lines = []
+    for para in _tokens(text):
+        cur, cw = [], 0.0
+        for grp in para:
+            gw = sum(draw.textlength(w, font=font) for w, _ in grp)
+            add = gw + (sp if cur else 0)
+            if cur and cw + add > max_w:
                 lines.append(cur)
-                cur = word
+                cur, cw = [grp], gw
+            else:
+                cur.append(grp)
+                cw += add
         lines.append(cur)
     return lines
 
 
+def _draw_line(draw, x: int, y: int, line, font, color, shadow: bool = False) -> None:
+    sp = draw.textlength(" ", font=font)
+    for gi, grp in enumerate(line):
+        if gi:
+            x += sp
+        for w, h in grp:
+            draw.text((x, y + (3 if shadow else 0)), w, font=font, fill=(0, 0, 0, 150) if shadow else (HL if h else color))
+            x += draw.textlength(w, font=font)
+
+
 def text_layer(text: str, sub: str, out: Path, kicker: str = "") -> None:
-    """가운데 조금 위(릴스 아래 캡션 자리 피함). 흰 굵은 글자 + 은은한 그림자 + 아래쪽 어둡게."""
+    """가운데 조금 위(릴스 아래 캡션 자리 피함). 흰 굵은 글자 + 강조(==…==)는 노랑 + 은은한 그림자."""
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     grad = Image.new("L", (1, H))
-    for y in range(H):  # 위·아래 가장자리 살짝 어둡게, 글자 자리(가운데) 더 어둡게
+    for y in range(H):
         mid = 1 - abs(y - H * 0.47) / (H * 0.47)
         grad.putpixel((0, y), int(40 + 70 * max(0, mid) ** 1.5))
     img.paste((0, 0, 0, 255), (0, 0, W, H), grad.resize((W, H)))
     d = ImageDraw.Draw(img)
     big, small, kick = _font("ExtraBold", 92), _font("SemiBold", 44), _font("Bold", 34)
-    lines = _wrap(d, text, big, W - 160)
-    sub_lines = _wrap(d, sub, small, W - 160) if sub else []
+    lines = _layout(d, text, big, W - 160)
+    sub_lines = _layout(d, sub, small, W - 160) if sub else []
     lh, sh = 116, 62
     block = len(lines) * lh + (24 + len(sub_lines) * sh if sub_lines else 0) + (64 if kicker else 0)
-    y = int(H * 0.47 - block / 2)
-    shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    sd = ImageDraw.Draw(shadow)
-    items = []
+    y0 = int(H * 0.47 - block / 2)
+    rows, y = [], y0
     if kicker:
-        items.append((kicker, kick, y, (232, 220, 196, 255)))
+        rows.append(([[(kicker, False)]], kick, y, (232, 220, 196, 255)))
         y += 64
     for ln in lines:
-        items.append((ln, big, y, (255, 255, 255, 255)))
+        rows.append((ln, big, y, (255, 255, 255, 255)))
         y += lh
     if sub_lines:
         y += 24
         for ln in sub_lines:
-            items.append((ln, small, y, (235, 235, 235, 255)))
+            rows.append((ln, small, y, (235, 235, 235, 255)))
             y += sh
-    for t, f, yy, _ in items:
-        sd.text((80, yy + 3), t, font=f, fill=(0, 0, 0, 150))
-    shadow = shadow.filter(ImageFilter.GaussianBlur(6))
-    img = Image.alpha_composite(img, shadow)
+    shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    sd = ImageDraw.Draw(shadow)
+    for ln, f, yy, c in rows:
+        _draw_line(sd, 80, yy, ln, f, c, shadow=True)
+    img = Image.alpha_composite(img, shadow.filter(ImageFilter.GaussianBlur(6)))
     d = ImageDraw.Draw(img)
-    for t, f, yy, c in items:
-        d.text((80, yy), t, font=f, fill=c)
+    for ln, f, yy, c in rows:
+        _draw_line(d, 80, yy, ln, f, c)
     img.save(out)
 
 
