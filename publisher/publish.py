@@ -146,9 +146,36 @@ def publish_instagram(post: dict, api: Api) -> dict:
         cid = api.call("POST", f"{IG_HOST}/{ver}/{uid}/media",
                        {"media_type": "CAROUSEL", "children": ",".join(kids), "caption": caption, "access_token": token})["id"]
     _ig_wait(api, ver, cid, token)
-    mid = api.call("POST", f"{IG_HOST}/{ver}/{uid}/media_publish", {"creation_id": cid, "access_token": token})["id"]
+    try:
+        mid = api.call("POST", f"{IG_HOST}/{ver}/{uid}/media_publish", {"creation_id": cid, "access_token": token})["id"]
+    except PublishError:
+        # 행동 차단(403, subcode 2207051) 상태에선 403이 와도 실제로 올라가는 경우가 있음 → 방금 올라간 글이 있으면 성공으로 봄
+        mid = _ig_just_posted(api, ver, uid, token)
+        if not mid:
+            raise
     link = api.call("GET", f"{IG_HOST}/{ver}/{mid}", {"fields": "permalink", "access_token": token}).get("permalink", "")
     return {"media_id": mid, "permalink": link}
+
+
+def _ig_just_posted(api: Api, ver: str, uid: str, token: str, within_s: int = 300) -> str:
+    try:
+        data = api.call("GET", f"{IG_HOST}/{ver}/{uid}/media", {"fields": "id,timestamp", "limit": "1", "access_token": token}).get("data") or []
+        if data:
+            ts = datetime.fromisoformat(data[0]["timestamp"].replace("Z", "+00:00").replace("+0000", "+00:00"))
+            if (datetime.now(timezone.utc) - ts).total_seconds() < within_s:
+                return data[0]["id"]
+    except (PublishError, KeyError, ValueError):
+        pass
+    return ""
+
+
+def paused_channels() -> set[str]:
+    """publisher/config.json의 paused_channels에 있는 채널은 올리지 않음 (예: 인스타 차단 중)."""
+    try:
+        cfg = json.loads((ROOT / "publisher" / "config.json").read_text(encoding="utf-8"))
+        return set(cfg.get("paused_channels") or [])
+    except (OSError, ValueError):
+        return set()
 
 
 # ---------------- 실행 ----------------
@@ -212,7 +239,7 @@ def run(now: datetime | None = None, api: Api | None = None) -> list[dict]:
     RESULTS.mkdir(parents=True, exist_ok=True)
     last = last_posted()
     only = bool(os.environ.get("ONLY_ID", "").strip())
-    picked, used = [], set()
+    picked, used = [], set(paused_channels())
     for post in due_posts(now):  # 채널마다 한 번에 1건, 그 채널 마지막 글에서 간격이 지난 경우만
         ch = post["channel"]
         if not only and (ch in used or (ch in last and now - last[ch] < gap)):
