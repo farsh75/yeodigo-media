@@ -184,10 +184,11 @@ def text_layer(text: str, sub: str, out: Path, kicker: str = "") -> None:
 
 
 # ---------------- 영상 ----------------
-def scene_clip(src: Path, overlay: Path, dur: float, out: Path, zoom_in: bool = True) -> None:
+def scene_clip(src: Path, overlay: Path, dur: float, out: Path, zoom_in: bool = True, focus_x: float = 0.5) -> None:
+    """focus_x: 가로 영상을 세로로 자를 때 어디를 남길지 (0 왼쪽 · 0.5 가운데 · 1 오른쪽). 주인공이 가장자리에 걸리면 조정."""
     n = round(dur * FPS)
     z = f"1+0.06*on/{n}" if zoom_in else f"1.06-0.06*on/{n}"
-    fc = (f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},"
+    fc = (f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H}:(iw-{W})*{focus_x}:(ih-{H})/2,fps={FPS},"
           f"scale={W * 2}:{H * 2},zoompan=z='{z}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps={FPS},"
           f"eq=saturation=1.05:contrast=1.03[b];[b][1:v]overlay=0:0,format=yuv420p[v]")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "0.3", "-t", f"{dur:.2f}", "-i", str(src), "-i", str(overlay),
@@ -238,7 +239,7 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
             ov = td / f"t{i}.png"
             text_layer(s["text"], s.get("sub", ""), ov, s.get("kicker", ""))
             c = td / f"c{i}.mp4"
-            scene_clip(src, ov, seg, c, zoom_in=i % 2 == 0)
+            scene_clip(src, ov, seg, c, zoom_in=i % 2 == 0, focus_x=float(s.get("focus_x", 0.5)))
             clips.append(c)
             credits.append({"scene": i + 1, "query": s["query"], "pixabay_id": h["id"], "page": h.get("pageURL"), "user": h.get("user"), "tags": h.get("tags")})
         OUT.mkdir(parents=True, exist_ok=True)
