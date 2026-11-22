@@ -10,8 +10,8 @@
     "amsterdam"
    ],
    "kicker": "내년 암스테르담 가는 분",
-   "text": "암스테르담 숙소비,\n내년부터 ==더 나가요==",
-   "sub": "관광세 방값의 12.5% → ==16%=="
+   "text": "암스테르담 관광세,\n내년부터 방값의 ==16%==",
+   "sub": "지금은 12.5%"
   },
   {
    "query": "amsterdam canal houses",
@@ -19,8 +19,8 @@
     "amsterdam canal",
     "amsterdam"
    ],
-   "text": "1박 200유로 방이면",
-   "sub": "관광세 하루 25유로 → ==32유로=="
+   "text": "1박 200유로 방이면\n하루 ==32유로==",
+   "sub": "지금은 25유로"
   },
   {
    "query": "amsterdam bridge",
@@ -46,7 +46,7 @@
     "amsterdam canal",
     "amsterdam"
    ],
-   "text": "결제 전\n==총액==부터 확인",
+   "text": "결제 전\n총액부터 확인",
    "sub": "'city tax'가 따로 붙는지 보기"
   },
   {
@@ -59,7 +59,7 @@
    "sub": "여디고 · 여행 어디로 갈까?"
   }
  ],
- "rev": 5,
+ "rev": 6,
  "place": [
   "amsterdam"
  ],
