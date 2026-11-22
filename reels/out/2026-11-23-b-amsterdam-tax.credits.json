@@ -1,0 +1,55 @@
+{
+ "id": "2026-11-23-b-amsterdam-tax",
+ "duration": 15.6,
+ "credits": [
+  {
+   "scene": 1,
+   "query": "amsterdam canal",
+   "pixabay_id": 367148,
+   "page": "https://pixabay.com/videos/id-367148/",
+   "user": "Tpix10",
+   "tags": "netherlands, amsterdam, nature, holland, europe, North Holland, Amsterdam, Netherlands"
+  },
+  {
+   "scene": 2,
+   "query": "amsterdam canal houses",
+   "pixabay_id": 22789,
+   "page": "https://pixabay.com/videos/id-22789/",
+   "user": "WestNL",
+   "tags": "amsterdam, canal, netherlands, city, europe, water, holland, architecture, dutch, waterway, boats, tourist, famous, house, building, bridge, travel, tourism, bike"
+  },
+  {
+   "scene": 3,
+   "query": "amsterdam bridge",
+   "pixabay_id": 213096,
+   "page": "https://pixabay.com/videos/id-213096/",
+   "user": "Tbabai",
+   "tags": "amsterdam, holland, channel, netherlands, boat, cruising, channel cruising, sunny day, river"
+  },
+  {
+   "scene": 4,
+   "query": "amsterdam canal night",
+   "pixabay_id": 168140,
+   "page": "https://pixabay.com/videos/id-168140/",
+   "user": "Rick_Coyle",
+   "tags": "amsterdam, drone, aerial, night, city, skyline, water, canals, train station, train, city center, architecture, sun rise, sunrise, bridges"
+  },
+  {
+   "scene": 5,
+   "query": "amsterdam street",
+   "pixabay_id": 211858,
+   "page": "https://pixabay.com/videos/id-211858/",
+   "user": "SiarheiDalivelia",
+   "tags": "architecture, city, drone, quadrocopter, vacation, sky, travel, forest, street, building, urban, road, cars, amsterdam, landscape"
+  },
+  {
+   "scene": 6,
+   "query": "amsterdam canal sunset",
+   "pixabay_id": 168141,
+   "page": "https://pixabay.com/videos/id-168141/",
+   "user": "Rick_Coyle",
+   "tags": "amsterdam, drone, aerial, night, sunrise, city, skyline, museum, canal, water, bridges"
+  }
+ ],
+ "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"
+}
