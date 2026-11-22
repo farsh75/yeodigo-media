@@ -1,0 +1,9 @@
+{"id": "2026-11-22-a-kyoto-tax", "from_item": "2026-11-16-a-instagram-2", "title": "교토 숙박세, 둘이 자면 달라져요",
+ "scenes": [
+  {"query": "kyoto", "fallback": ["kyoto temple"], "kicker": "교토에 묵을 분", "text": "교토 숙박세,\n둘이 자면 달라져요", "sub": "1인 1박 방값 기준 5단계"},
+  {"query": "kyoto street", "fallback": ["kyoto"], "text": "3만 엔 방에\n혼자면 1,000엔", "sub": "둘이면 400엔씩, 합계 800엔"},
+  {"query": "kyoto temple", "fallback": ["japan temple"], "text": "방값 2천 엔 차이로\n세금은 2.5배", "sub": "둘이 3.9만 엔 방 800엔 → 4.1만 엔 방 2,000엔"},
+  {"query": "kyoto night", "fallback": ["kyoto lantern"], "text": "둘이 4박이면\n숙박세만 8,000엔", "sub": "방값 1박 4.5만 엔 기준"},
+  {"query": "kyoto autumn", "fallback": ["japan autumn"], "text": "방값은 식사·소비세\n뺀 금액 기준", "sub": "예약 요금에 포함인지도 확인"},
+  {"query": "kyoto sunset", "fallback": ["japan sunset"], "text": "저장해 두고\n예약할 때 꺼내 보기", "sub": "여디고 · 여행 어디로 갈까?"}
+ ]}

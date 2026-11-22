@@ -1,0 +1,213 @@
+"""릴스 만들기 (GitHub Actions에서 실행 — 여기선 인터넷이 됨).
+
+reels/specs/<id>.json 마다 reels/out/<id>.mp4 가 없으면:
+  장면별 검색어로 Pixabay 실사 영상을 받아(상업 이용·출처 표기 불필요) 9:16으로 자르고,
+  큰 글자를 얹고, 장면을 이어 붙이고, 위쪽 진행 막대를 넣는다. 소리 없음(음악은 앱에서).
+쓴 영상 출처는 reels/out/<id>.credits.json 에 남긴다.
+
+spec: {"id", "title", "scenes": [{"query", "text", "sub"?, "dur"?}], "lang"?}
+  - 무료만: Pixabay API 결과 중 pixabay.com 콘텐츠만 쓴다(유료 스톡 사이트 결과·링크는 거름).
+  - 실제 숙소 객실을 보여 주는 장면은 만들지 않는다(그 숙소 사진이 아니면 사실과 달라짐). 도시·풍경·사물만.
+"""
+from __future__ import annotations
+
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import urllib.parse
+import urllib.request
+from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
+
+ROOT = Path(os.environ.get("MEDIA_REPO", "."))
+SPECS, OUT = ROOT / "reels" / "specs", ROOT / "reels" / "out"
+FONTS = ROOT / "publisher" / "fonts"
+W, H, FPS = 1080, 1920, 30
+FADE = 0.3
+TRANS = ["fade", "smoothleft", "fade", "slideup", "fade", "smoothleft", "fade"]
+
+
+# ---------------- Pixabay ----------------
+def pixabay_videos(query: str, key: str, opener=urllib.request.urlopen) -> list[dict]:
+    q = urllib.parse.urlencode({"key": key, "q": query, "per_page": 30, "safesearch": "true", "video_type": "film"})
+    with opener(f"https://pixabay.com/api/videos/?{q}", timeout=30) as r:
+        return json.loads(r.read().decode()).get("hits", [])
+
+
+def pick(hits: list[dict], need_s: float, used: set[int]) -> dict | None:
+    """세로 영상 우선, 충분히 길고, 사람 얼굴이 주인공일 법한 것(people 태그) 피하고, 안 쓴 것."""
+    def score(h):
+        v = (h.get("videos") or {}).get("large") or (h.get("videos") or {}).get("medium") or {}
+        w, hh = v.get("width") or 0, v.get("height") or 0
+        return ((hh > w) * 2 + (min(w, hh) >= 1080) + (h.get("likes", 0) > 20), h.get("downloads", 0))
+    # 무료만 (맥퀸님 2026-11-22): Pixabay 자체 콘텐츠(pixabay.com 페이지)만. 유료 스톡(iStock 등 광고 결과)은 받지 않는다.
+    hits = [h for h in hits if str(h.get("pageURL", "")).startswith("https://pixabay.com/")]
+    ok = [h for h in hits if h.get("id") not in used and (h.get("duration") or 0) >= need_s + 0.5
+          and not any(t in (h.get("tags") or "") for t in ("woman", "man", "girl", "boy", "people", "person", "face"))]
+    return max(ok, key=score) if ok else None
+
+
+def video_url(h: dict) -> str:
+    v = h["videos"]
+    for k in ("large", "medium", "small"):
+        if v.get(k, {}).get("url"):
+            return v[k]["url"]
+    raise ValueError("영상 주소 없음")
+
+
+def download(url: str, dest: Path, opener=urllib.request.urlopen) -> None:
+    req = urllib.request.Request(url, headers={"User-Agent": "yeodigo-reels/1.0"})
+    with opener(req, timeout=120) as r, open(dest, "wb") as f:
+        f.write(r.read())
+
+
+# ---------------- 글자 ----------------
+def _font(weight: str, size: int) -> ImageFont.FreeTypeFont:
+    return ImageFont.truetype(str(FONTS / f"Pretendard-{weight}.otf"), size)
+
+
+def _wrap(draw, text: str, font, max_w: int) -> list[str]:
+    lines = []
+    for para in text.split("\n"):
+        cur = ""
+        for word in para.split(" "):
+            t = (cur + " " + word).strip()
+            if draw.textlength(t, font=font) <= max_w or not cur:
+                cur = t
+            else:
+                lines.append(cur)
+                cur = word
+        lines.append(cur)
+    return lines
+
+
+def text_layer(text: str, sub: str, out: Path, kicker: str = "") -> None:
+    """가운데 조금 위(릴스 아래 캡션 자리 피함). 흰 굵은 글자 + 은은한 그림자 + 아래쪽 어둡게."""
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    grad = Image.new("L", (1, H))
+    for y in range(H):  # 위·아래 가장자리 살짝 어둡게, 글자 자리(가운데) 더 어둡게
+        mid = 1 - abs(y - H * 0.47) / (H * 0.47)
+        grad.putpixel((0, y), int(40 + 70 * max(0, mid) ** 1.5))
+    img.paste((0, 0, 0, 255), (0, 0, W, H), grad.resize((W, H)))
+    d = ImageDraw.Draw(img)
+    big, small, kick = _font("ExtraBold", 92), _font("SemiBold", 44), _font("Bold", 34)
+    lines = _wrap(d, text, big, W - 160)
+    sub_lines = _wrap(d, sub, small, W - 160) if sub else []
+    lh, sh = 116, 62
+    block = len(lines) * lh + (24 + len(sub_lines) * sh if sub_lines else 0) + (64 if kicker else 0)
+    y = int(H * 0.47 - block / 2)
+    shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    sd = ImageDraw.Draw(shadow)
+    items = []
+    if kicker:
+        items.append((kicker, kick, y, (232, 220, 196, 255)))
+        y += 64
+    for ln in lines:
+        items.append((ln, big, y, (255, 255, 255, 255)))
+        y += lh
+    if sub_lines:
+        y += 24
+        for ln in sub_lines:
+            items.append((ln, small, y, (235, 235, 235, 255)))
+            y += sh
+    for t, f, yy, _ in items:
+        sd.text((80, yy + 3), t, font=f, fill=(0, 0, 0, 150))
+    shadow = shadow.filter(ImageFilter.GaussianBlur(6))
+    img = Image.alpha_composite(img, shadow)
+    d = ImageDraw.Draw(img)
+    for t, f, yy, c in items:
+        d.text((80, yy), t, font=f, fill=c)
+    img.save(out)
+
+
+# ---------------- 영상 ----------------
+def scene_clip(src: Path, overlay: Path, dur: float, out: Path, zoom_in: bool = True) -> None:
+    n = round(dur * FPS)
+    z = f"1+0.06*on/{n}" if zoom_in else f"1.06-0.06*on/{n}"
+    fc = (f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},"
+          f"scale={W * 2}:{H * 2},zoompan=z='{z}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps={FPS},"
+          f"eq=saturation=1.05:contrast=1.03[b];[b][1:v]overlay=0:0,format=yuv420p[v]")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "0.3", "-t", f"{dur:.2f}", "-i", str(src), "-i", str(overlay),
+                    "-filter_complex", fc, "-map", "[v]", "-an", "-frames:v", str(n), "-c:v", "libx264", "-preset", "veryfast",
+                    "-crf", "19", "-r", str(FPS), str(out)], check=True)
+
+
+def join(clips: list[Path], durs: list[float], out: Path) -> None:
+    args = ["ffmpeg", "-y", "-loglevel", "error"]
+    for c in clips:
+        args += ["-i", str(c)]
+    total = sum(durs)
+    parts, prev, t = [], "[0:v]", 0.0
+    for i in range(1, len(clips)):
+        t += durs[i - 1]
+        lab = f"[x{i}]"
+        parts.append(f"{prev}[{i}:v]xfade=transition={TRANS[(i - 1) % len(TRANS)]}:duration={FADE}:offset={t:.3f}{lab}")
+        prev = lab
+    parts.append(f"color=c=0xE8DCC4:s={W}x8:r={FPS}:d={total:.2f}[bar];{prev}[bar]overlay=x='-W+W*t/{total:.2f}':y=150:shortest=1[v]")
+    args += ["-filter_complex", ";".join(parts), "-map", "[v]", "-c:v", "libx264", "-preset", "medium", "-crf", "21",
+             "-pix_fmt", "yuv420p", "-r", str(FPS), "-movflags", "+faststart", str(out)]
+    subprocess.run(args, check=True)
+
+
+def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
+    scenes = spec["scenes"]
+    durs = [float(s.get("dur") or (2.2 if i == 0 else 3.0 if i == len(scenes) - 1 else 2.6)) for i, s in enumerate(scenes)]
+    used: set[int] = set()
+    credits, clips = [], []
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        for i, (s, d) in enumerate(zip(scenes, durs)):
+            seg = d + (FADE if i < len(scenes) - 1 else 0)
+            h = None
+            for q in [s["query"]] + list(s.get("fallback") or []):
+                h = pick(fetch(q, key), seg, used)
+                if h:
+                    break
+            if not h:
+                raise RuntimeError(f"장면 {i + 1} '{s['query']}' 맞는 영상 없음")
+            used.add(h["id"])
+            src = td / f"src{i}.mp4"
+            dl(video_url(h), src)
+            ov = td / f"t{i}.png"
+            text_layer(s["text"], s.get("sub", ""), ov, s.get("kicker", ""))
+            c = td / f"c{i}.mp4"
+            scene_clip(src, ov, seg, c, zoom_in=i % 2 == 0)
+            clips.append(c)
+            credits.append({"scene": i + 1, "query": s["query"], "pixabay_id": h["id"], "page": h.get("pageURL"), "user": h.get("user"), "tags": h.get("tags")})
+        OUT.mkdir(parents=True, exist_ok=True)
+        out = OUT / f"{spec['id']}.mp4"
+        join(clips, durs, out)
+    meta = {"id": spec["id"], "duration": round(sum(durs), 1), "credits": credits, "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"}
+    (OUT / f"{spec['id']}.credits.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+    return meta
+
+
+def main() -> int:
+    key = os.environ.get("PIXABAY_API_KEY", "").strip()
+    if not key:
+        print("PIXABAY_API_KEY 없음", file=sys.stderr)
+        return 1
+    only = os.environ.get("ONLY_ID", "").strip()
+    bad = 0
+    for f in sorted(SPECS.glob("*.json")):
+        spec = json.loads(f.read_text(encoding="utf-8"))
+        if only and spec["id"] != only:
+            continue
+        if (OUT / f"{spec['id']}.mp4").exists() and not only:
+            continue
+        try:
+            m = make(spec, key)
+            print(f"[릴스] {spec['id']} {m['duration']}초")
+        except Exception as e:  # 한 편 실패해도 나머지는 계속
+            bad += 1
+            (OUT).mkdir(parents=True, exist_ok=True)
+            (OUT / f"{spec['id']}.error.txt").write_text(str(e), encoding="utf-8")
+            print(f"[실패] {spec['id']}: {e}", file=sys.stderr)
+    return 1 if bad else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

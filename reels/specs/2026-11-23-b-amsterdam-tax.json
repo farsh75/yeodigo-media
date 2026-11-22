@@ -1,0 +1,9 @@
+{"id": "2026-11-23-b-amsterdam-tax", "from_item": "2026-11-23-b-instagram-1", "title": "암스테르담 숙소비, 내년부터 더 나가요",
+ "scenes": [
+  {"query": "amsterdam canal", "fallback": ["amsterdam"], "kicker": "내년 암스테르담 가는 분", "text": "암스테르담 숙소비,\n내년부터 더 나가요", "sub": "관광세 방값의 12.5% → 16%"},
+  {"query": "amsterdam houses", "fallback": ["amsterdam street"], "text": "1박 200유로 방이면", "sub": "관광세 하루 25유로 → 32유로"},
+  {"query": "amsterdam bicycle", "fallback": ["amsterdam"], "text": "4박이면\n28유로 더", "sub": "사람 수와 상관없이 방값 기준"},
+  {"query": "amsterdam night", "fallback": ["amsterdam canal night"], "text": "20%까지 올린다는\n계획도 있어요", "sub": "확정된 건 2027년 16%까지"},
+  {"query": "amsterdam boat canal", "fallback": ["amsterdam canal"], "text": "결제 전\n총액부터 확인", "sub": "'city tax'가 따로 붙는지 보기"},
+  {"query": "amsterdam sunset", "fallback": ["netherlands sunset"], "text": "저장해 두고\n예약할 때 꺼내 보기", "sub": "여디고 · 여행 어디로 갈까?"}
+ ]}
