@@ -48,19 +48,66 @@ BAN = ("woman", "man", "girl", "boy", "people", "person", "face", "tourists", "c
        "bmw", "audi", "mercedes", "tesla", "logo", "brand", "advertising")
 
 
-def pick(hits: list[dict], need_s: float, used: set[int], place: list[str] | None = None, exclude: list[str] | None = None) -> dict | None:
-    """세로 영상 우선, 충분히 길고, 사람 얼굴이 주인공일 법한 것(people 태그) 피하고, 안 쓴 것."""
+def candidates(hits: list[dict], need_s: float, used: set[int], place: list[str] | None = None, exclude: list[str] | None = None) -> list[dict]:
+    """조건 맞는 영상을 좋은 순서로. 무료(pixabay.com)만 · 태그에 장소 이름 · 사람·차·브랜드 제외 · 충분히 긺."""
     def score(h):
         v = (h.get("videos") or {}).get("large") or (h.get("videos") or {}).get("medium") or {}
         w, hh = v.get("width") or 0, v.get("height") or 0
-        return ((hh > w) * 2 + (min(w, hh) >= 1080) + (h.get("likes", 0) > 20), h.get("downloads", 0))
+        likes, dls = h.get("likes", 0), max(1, h.get("downloads", 0))
+        return ((hh > w) * 2 + (max(w, hh) >= 1920) + (likes >= 30) + (likes / dls * 100 >= 1.5), likes, dls)
     # 무료만 (맥퀸님 2026-11-22): Pixabay 자체 콘텐츠(pixabay.com 페이지)만. 유료 스톡(iStock 등 광고 결과)은 받지 않는다.
     hits = [h for h in hits if str(h.get("pageURL", "")).startswith("https://pixabay.com/")]
     if place:  # 사실과 다른 장소 방지: 태그에 그 장소 이름이 있는 영상만 (교토 장면에 오사카성 X)
         hits = [h for h in hits if any(p.lower() in str(h.get("tags", "")).lower() for p in place)]
     ok = [h for h in hits if h.get("id") not in used and (h.get("duration") or 0) >= need_s + 0.5
           and not ({t.strip() for t in str(h.get("tags", "")).lower().split(",")} & set(BAN + tuple(exclude or ())))]
-    return max(ok, key=score) if ok else None
+    return sorted(ok, key=score, reverse=True)
+
+
+def pick(hits, need_s, used, place=None, exclude=None):
+    c = candidates(hits, need_s, used, place, exclude)
+    return c[0] if c else None
+
+
+def by_id(vid: int, key: str, opener=urllib.request.urlopen) -> dict | None:
+    q = urllib.parse.urlencode({"key": key, "id": vid})
+    req = urllib.request.Request(f"https://pixabay.com/api/videos/?{q}", headers=UA)
+    with opener(req, timeout=30) as r:
+        hits = json.loads(r.read().decode()).get("hits", [])
+    return hits[0] if hits else None
+
+
+def thumb(h: dict) -> str:
+    v = h.get("videos") or {}
+    for k in ("medium", "small", "large", "tiny"):
+        if v.get(k, {}).get("thumbnail"):
+            return v[k]["thumbnail"]
+    return ""
+
+
+def contact_sheet(rows: list, out: Path) -> None:
+    """장면마다 후보 4개 썸네일(고른 것 초록 테두리). 루틴(Claude)이 보고 더 맞는 걸 spec 장면의 pixabay_id로 바꿔 다시 만든다."""
+    import io
+    tw, th, pad, lab = 320, 180, 12, 56
+    img = Image.new("RGB", (pad + 4 * (tw + pad) + 460, pad + len(rows) * (th + lab + pad)), (24, 26, 30))
+    d = ImageDraw.Draw(img)
+    f, fs = _font("Bold", 22), _font("SemiBold", 18)
+    for r, (scene, cands, chosen) in enumerate(rows):
+        y = pad + r * (th + lab + pad)
+        d.text((pad + 4 * (tw + pad), y), f"{r + 1}. {scene['text'].replace(chr(10), ' ')}", font=f, fill=(255, 255, 255))
+        d.text((pad + 4 * (tw + pad), y + 34), scene.get("query", ""), font=fs, fill=(180, 180, 180))
+        for c, h in enumerate(cands[:4]):
+            x = pad + c * (tw + pad)
+            try:
+                with urllib.request.urlopen(urllib.request.Request(thumb(h), headers=UA), timeout=30) as resp:
+                    img.paste(Image.open(io.BytesIO(resp.read())).convert("RGB").resize((tw, th)), (x, y))
+            except Exception:
+                d.rectangle((x, y, x + tw, y + th), fill=(60, 60, 60))
+            if h["id"] == chosen:
+                d.rectangle((x - 4, y - 4, x + tw + 4, y + th + 4), outline=(46, 204, 170), width=6)
+            d.text((x, y + th + 6), f"id {h['id']}", font=f, fill=(46, 204, 170) if h["id"] == chosen else (220, 220, 220))
+            d.text((x, y + th + 32), str(h.get("tags", ""))[:34], font=fs, fill=(160, 160, 160))
+    img.save(out, quality=85)
 
 
 def video_url(h: dict) -> str:
@@ -169,19 +216,22 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
     scenes = spec["scenes"]
     durs = [float(s.get("dur") or (2.2 if i == 0 else 3.0 if i == len(scenes) - 1 else 2.6)) for i, s in enumerate(scenes)]
     used: set[int] = set()
-    credits, clips = [], []
+    credits, clips, sheet_rows = [], [], []
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
         for i, (s, d) in enumerate(zip(scenes, durs)):
             seg = d + (FADE if i < len(scenes) - 1 else 0)
-            h = None
             place = s.get("place", spec.get("place"))
+            cands: list[dict] = []
             for q in [s["query"]] + list(s.get("fallback") or []) + list(place or []):
-                h = pick(fetch(q, key), seg, used, place, spec.get("exclude"))
-                if h:
+                seen = {x["id"] for x in cands}
+                cands += [c for c in candidates(fetch(q, key), seg, used, place, spec.get("exclude")) if c["id"] not in seen]
+                if len(cands) >= 4:
                     break
+            h = by_id(int(s["pixabay_id"]), key) if s.get("pixabay_id") and fetch is pixabay_videos else (cands[0] if cands else None)
             if not h:
                 raise RuntimeError(f"장면 {i + 1} '{s['query']}' 맞는 영상 없음")
+            sheet_rows.append((s, ([h] + [c for c in cands if c["id"] != h["id"]])[:4], h["id"]))
             used.add(h["id"])
             src = td / f"src{i}.mp4"
             dl(video_url(h), src)
@@ -194,6 +244,8 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
         OUT.mkdir(parents=True, exist_ok=True)
         out = OUT / f"{spec['id']}.mp4"
         join(clips, durs, out)
+        if fetch is pixabay_videos:
+            contact_sheet(sheet_rows, OUT / f"{spec['id']}.candidates.jpg")
     meta = {"id": spec["id"], "duration": round(sum(durs), 1), "credits": credits, "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"}
     (OUT / f"{spec['id']}.credits.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
     return meta
