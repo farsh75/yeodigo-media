@@ -90,6 +90,20 @@ def by_id(vid: int, key: str, opener=urllib.request.urlopen) -> dict | None:
     return hits[0] if hits else None
 
 
+def photo_by_id(pid: int, key: str) -> dict | None:
+    q = urllib.parse.urlencode({"key": key, "id": pid})
+    req = urllib.request.Request(f"https://pixabay.com/api/?{q}", headers=UA)
+    with urllib.request.urlopen(req, timeout=30) as r:
+        hits = json.loads(r.read().decode()).get("hits", [])
+    if not hits:
+        return None
+    h = hits[0]
+    h["duration"], h["is_photo"] = 99, True
+    h["videos"] = {"large": {"url": h.get("largeImageURL") or h.get("webformatURL"), "width": h.get("imageWidth", 0), "height": h.get("imageHeight", 0),
+                             "thumbnail": h.get("webformatURL") or h.get("previewURL")}}
+    return h
+
+
 def thumb(h: dict) -> str:
     v = h.get("videos") or {}
     for k in ("medium", "small", "large", "tiny"):
@@ -293,7 +307,10 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
                     cands += [c for c in candidates(pixabay_photos(q, key), seg, used, place, spec.get("exclude")) if c["id"] not in seen]
                     if len(cands) >= 4:
                         break
-            h = by_id(int(s["pixabay_id"]), key) if s.get("pixabay_id") and fetch is pixabay_videos and not s.get("photo") else (cands[0] if cands else None)
+            if s.get("pixabay_id") and fetch is pixabay_videos:
+                h = (photo_by_id if photo_only else by_id)(int(s["pixabay_id"]), key)
+            else:
+                h = cands[0] if cands else None
             start = 0.3
             if not h and pool:  # 그 장소 영상이 적으면(예: 보홀) 다른 도시 영상을 끌어오지 않고, 이미 쓴 같은 장소 영상의 다른 구간을 쓴다
                 h = min(pool, key=lambda x: reuse.get(x["id"], 0))

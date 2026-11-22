@@ -4,8 +4,7 @@
  "title": "보홀 헤난 알로나 비치, 위치는 5곳 중 1위",
  "place": [
   "bohol",
-  "panglao",
-  "alona"
+  "panglao"
  ],
  "exclude": [
   "tourists",
@@ -21,7 +20,8 @@
    ],
    "kicker": "필리핀 보홀 · 숙소 비교",
    "text": "보홀 헤난 알로나 비치,\n위치는 5곳 중 ==1위==",
-   "sub": "아고다 위치 9.5 · 주변 리조트 5곳 비교"
+   "sub": "아고다 위치 9.5 · 주변 리조트 5곳 비교",
+   "pixabay_id": 2832716
   },
   {
    "query": "alona beach bohol",
@@ -31,7 +31,8 @@
     "bohol beach"
    ],
    "text": "알로나 비치 한가운데,\n공항까지 차로 ==6분==",
-   "sub": "식당·투어는 걸어서"
+   "sub": "식당·투어는 걸어서",
+   "pixabay_id": 3593075
   },
   {
    "query": "panglao island",
@@ -41,7 +42,8 @@
     "bohol beach"
    ],
    "text": "시설 점수도\n==9.3==으로 1위",
-   "sub": "수영장 3곳 · 아이와 가기 좋음"
+   "sub": "수영장 3곳 · 아이와 가기 좋음",
+   "pixabay_id": 2163352
   },
   {
    "query": "panglao beach",
@@ -51,7 +53,8 @@
     "bohol beach"
    ],
    "text": "가성비는 ==8.8==\n5곳 중 공동 최하",
-   "sub": "서비스 9.1(5위) · 아고다 항목별 점수"
+   "sub": "서비스 9.1(5위) · 아고다 항목별 점수",
+   "pixabay_id": 10327055
   },
   {
    "query": "alona beach panglao",
@@ -61,7 +64,8 @@
     "bohol beach"
    ],
    "text": "조용한 해변이 우선이면\n다른 곳이 나아요",
-   "sub": "해변이 붐비는 편 · 객실은 최신이 아님"
+   "sub": "해변이 붐비는 편 · 객실은 최신이 아님",
+   "pixabay_id": 2429584
   },
   {
    "query": "bohol sunset",
@@ -71,7 +75,8 @@
     "bohol beach"
    ],
    "text": "건기 ==12~5월==에\n가는 게 좋아요",
-   "sub": "연말 성수기는 일찍 예약"
+   "sub": "연말 성수기는 일찍 예약",
+   "pixabay_id": 2692912
   },
   {
    "query": "alona beach sunset",
@@ -81,9 +86,10 @@
     "bohol beach"
    ],
    "text": "객실 고르는 법·평점 비교는\n블로그에서",
-   "sub": "여디고 · 여행 어디로 갈까?"
+   "sub": "여디고 · 여행 어디로 갈까?",
+   "pixabay_id": 2832716
   }
  ],
- "rev": 3,
+ "rev": 4,
  "media": "photo"
 }
