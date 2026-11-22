@@ -1,0 +1,12 @@
+{"id": "2026-11-16-a-henann-alona", "from_item": "2026-11-16-a-blog-1", "title": "보홀 헤난 알로나 비치, 위치는 5곳 중 1위",
+ "place": ["bohol", "panglao", "alona"],
+ "exclude": ["tourists", "crowd"],
+ "scenes": [
+  {"query": "alona beach", "fallback": ["panglao beach", "bohol beach"], "kicker": "필리핀 보홀 · 숙소 비교", "text": "보홀 헤난 알로나 비치,\n위치는 5곳 중 ==1위==", "sub": "아고다 위치 9.5 · 주변 리조트 5곳 비교"},
+  {"query": "panglao beach", "fallback": ["alona beach", "bohol"], "text": "알로나 비치 한가운데,\n공항까지 차로 ==6분==", "sub": "식당·투어는 걸어서"},
+  {"query": "bohol sea", "fallback": ["panglao", "bohol"], "text": "시설 점수도\n==9.3==으로 1위", "sub": "수영장 3곳 · 아이와 가기 좋음"},
+  {"query": "bohol island", "fallback": ["bohol", "panglao"], "text": "가성비는 ==8.8==\n5곳 중 공동 최하", "sub": "서비스 9.1(5위) · 아고다 항목별 점수"},
+  {"query": "panglao", "fallback": ["bohol beach", "bohol"], "text": "조용한 해변이 우선이면\n다른 곳이 나아요", "sub": "해변이 붐비는 편 · 객실은 최신이 아님"},
+  {"query": "bohol sunset", "fallback": ["panglao sunset", "bohol"], "text": "건기 ==12~5월==에\n가는 게 좋아요", "sub": "연말 성수기는 일찍 예약"},
+  {"query": "alona beach sunset", "fallback": ["bohol", "panglao"], "text": "객실 고르는 법·평점 비교는\n블로그에서", "sub": "여디고 · 여행 어디로 갈까?"}
+ ]}
