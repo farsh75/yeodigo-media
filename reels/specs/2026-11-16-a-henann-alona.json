@@ -43,7 +43,7 @@
    ],
    "text": "시설 점수도\n==9.3==으로 1위",
    "sub": "수영장 3곳 · 아이와 가기 좋음",
-   "pixabay_id": 2163352
+   "pixabay_id": 2692912
   },
   {
    "query": "panglao beach",
@@ -76,7 +76,7 @@
    ],
    "text": "건기 ==12~5월==에\n가는 게 좋아요",
    "sub": "연말 성수기는 일찍 예약",
-   "pixabay_id": 2692912
+   "pixabay_id": 2163352
   },
   {
    "query": "alona beach sunset",
@@ -90,6 +90,6 @@
    "pixabay_id": 2832716
   }
  ],
- "rev": 4,
+ "rev": 5,
  "media": "photo"
 }
