@@ -44,7 +44,11 @@ def pixabay_videos(query: str, key: str, opener=urllib.request.urlopen) -> list[
         raise RuntimeError(f"Pixabay 검색 {e.code}: {e.read().decode(errors='replace')[:200]}") from None
 
 
-def pick(hits: list[dict], need_s: float, used: set[int], place: list[str] | None = None) -> dict | None:
+BAN = ("woman", "man", "girl", "boy", "people", "person", "face", "tourists", "crowd", "car", "interior", "dashboard",
+       "bmw", "audi", "mercedes", "tesla", "logo", "brand", "advertising")
+
+
+def pick(hits: list[dict], need_s: float, used: set[int], place: list[str] | None = None, exclude: list[str] | None = None) -> dict | None:
     """세로 영상 우선, 충분히 길고, 사람 얼굴이 주인공일 법한 것(people 태그) 피하고, 안 쓴 것."""
     def score(h):
         v = (h.get("videos") or {}).get("large") or (h.get("videos") or {}).get("medium") or {}
@@ -55,7 +59,7 @@ def pick(hits: list[dict], need_s: float, used: set[int], place: list[str] | Non
     if place:  # 사실과 다른 장소 방지: 태그에 그 장소 이름이 있는 영상만 (교토 장면에 오사카성 X)
         hits = [h for h in hits if any(p.lower() in str(h.get("tags", "")).lower() for p in place)]
     ok = [h for h in hits if h.get("id") not in used and (h.get("duration") or 0) >= need_s + 0.5
-          and not any(t in (h.get("tags") or "") for t in ("woman", "man", "girl", "boy", "people", "person", "face"))]
+          and not ({t.strip() for t in str(h.get("tags", "")).lower().split(",")} & set(BAN + tuple(exclude or ())))]
     return max(ok, key=score) if ok else None
 
 
@@ -173,7 +177,7 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
             h = None
             place = s.get("place", spec.get("place"))
             for q in [s["query"]] + list(s.get("fallback") or []) + list(place or []):
-                h = pick(fetch(q, key), seg, used, place)
+                h = pick(fetch(q, key), seg, used, place, spec.get("exclude"))
                 if h:
                     break
             if not h:
