@@ -225,14 +225,14 @@ def text_layer(text: str, sub: str, out: Path, kicker: str = "") -> None:
 
 
 # ---------------- 영상 ----------------
-def scene_clip(src: Path, overlay: Path, dur: float, out: Path, zoom_in: bool = True, focus_x: float = 0.5) -> None:
+def scene_clip(src: Path, overlay: Path, dur: float, out: Path, zoom_in: bool = True, focus_x: float = 0.5, start: float = 0.3) -> None:
     """focus_x: 가로 영상을 세로로 자를 때 어디를 남길지 (0 왼쪽 · 0.5 가운데 · 1 오른쪽). 주인공이 가장자리에 걸리면 조정."""
     n = round(dur * FPS)
     z = f"1+0.06*on/{n}" if zoom_in else f"1.06-0.06*on/{n}"
     fc = (f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H}:(iw-{W})*{focus_x}:(ih-{H})/2,fps={FPS},"
           f"scale={W * 2}:{H * 2},zoompan=z='{z}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps={FPS},"
           f"eq=saturation=1.05:contrast=1.03[b];[b][1:v]overlay=0:0,format=yuv420p[v]")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "0.3", "-t", f"{dur:.2f}", "-i", str(src), "-i", str(overlay),
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{start:.2f}", "-t", f"{dur:.2f}", "-i", str(src), "-i", str(overlay),
                     "-filter_complex", fc, "-map", "[v]", "-an", "-frames:v", str(n), "-c:v", "libx264", "-preset", "veryfast",
                     "-crf", "19", "-r", str(FPS), str(out)], check=True)
 
@@ -259,6 +259,8 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
     durs = [float(s.get("dur") or (2.2 if i == 0 else 3.0 if i == len(scenes) - 1 else 2.6)) for i, s in enumerate(scenes)]
     used: set[int] = set()
     credits, clips, sheet_rows = [], [], []
+    pool: list[dict] = []          # 이 릴스에서 쓴 영상 (다시 쓸 후보)
+    reuse: dict[int, int] = {}
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
         for i, (s, d) in enumerate(zip(scenes, durs)):
@@ -271,8 +273,15 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
                 if len(cands) >= 4:
                     break
             h = by_id(int(s["pixabay_id"]), key) if s.get("pixabay_id") and fetch is pixabay_videos else (cands[0] if cands else None)
+            start = 0.3
+            if not h and pool:  # 그 장소 영상이 적으면(예: 보홀) 다른 도시 영상을 끌어오지 않고, 이미 쓴 같은 장소 영상의 다른 구간을 쓴다
+                h = min(pool, key=lambda x: reuse.get(x["id"], 0))
+                reuse[h["id"]] = reuse.get(h["id"], 0) + 1
+                start = min(max(0.3, (h.get("duration") or 0) - seg - 0.3), 0.3 + reuse[h["id"]] * (seg + 0.5))
             if not h:
                 raise RuntimeError(f"장면 {i + 1} '{s['query']}' 맞는 영상 없음")
+            if h["id"] not in {x["id"] for x in pool}:
+                pool.append(h)
             sheet_rows.append((s, ([h] + [c for c in cands if c["id"] != h["id"]])[:4], h["id"]))
             used.add(h["id"])
             src = td / f"src{i}.mp4"
@@ -280,7 +289,7 @@ def make(spec: dict, key: str, fetch=pixabay_videos, dl=download) -> dict:
             ov = td / f"t{i}.png"
             text_layer(s["text"], s.get("sub", ""), ov, s.get("kicker", ""))
             c = td / f"c{i}.mp4"
-            scene_clip(src, ov, seg, c, zoom_in=i % 2 == 0, focus_x=float(s.get("focus_x", 0.5)))
+            scene_clip(src, ov, seg, c, zoom_in=i % 2 == 0, focus_x=float(s.get("focus_x", 0.5)), start=start)
             clips.append(c)
             credits.append({"scene": i + 1, "query": s["query"], "pixabay_id": h["id"], "page": h.get("pageURL"), "user": h.get("user"), "tags": h.get("tags")})
         OUT.mkdir(parents=True, exist_ok=True)
