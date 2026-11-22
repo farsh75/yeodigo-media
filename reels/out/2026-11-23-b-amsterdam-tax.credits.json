@@ -1,0 +1,55 @@
+{
+ "id": "2026-11-23-b-amsterdam-tax",
+ "duration": 15.6,
+ "credits": [
+  {
+   "scene": 1,
+   "query": "amsterdam canal",
+   "pixabay_id": 230247,
+   "page": "https://pixabay.com/videos/id-230247/",
+   "user": "Matthias_Groeneveld",
+   "tags": "sunset, canal, city, light, orange, afternoon, houses, urban, traffic"
+  },
+  {
+   "scene": 2,
+   "query": "amsterdam houses",
+   "pixabay_id": 84878,
+   "page": "https://pixabay.com/videos/id-84878/",
+   "user": "eyefactory",
+   "tags": "lake, boat house, water, landscape, nature, house, reflection, forest, trees, autumn, fall, vertical video"
+  },
+  {
+   "scene": 3,
+   "query": "amsterdam bicycle",
+   "pixabay_id": 147560,
+   "page": "https://pixabay.com/videos/id-147560/",
+   "user": "ukesh012h",
+   "tags": "bicycle, adventure, mountain, nature, scene, outdoors"
+  },
+  {
+   "scene": 4,
+   "query": "amsterdam night",
+   "pixabay_id": 250395,
+   "page": "https://pixabay.com/videos/id-250395/",
+   "user": "Kanenori",
+   "tags": "building, castle, japanese castle, osaka castle, crescent moon, night view"
+  },
+  {
+   "scene": 5,
+   "query": "amsterdam boat canal",
+   "pixabay_id": 240573,
+   "page": "https://pixabay.com/videos/id-240573/",
+   "user": "mariancroitoru",
+   "tags": "bridge, architecture, boat, vessel, building, canal, cityscape, culture, destinations, europe, italian, italy, nautical, tourism, town, traditional, transportation, travel, venezia, venice, water"
+  },
+  {
+   "scene": 6,
+   "query": "amsterdam sunset",
+   "pixabay_id": 367148,
+   "page": "https://pixabay.com/videos/id-367148/",
+   "user": "Tpix10",
+   "tags": "netherlands, amsterdam, nature, holland, europe, North Holland, Amsterdam, Netherlands"
+  }
+ ],
+ "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"
+}

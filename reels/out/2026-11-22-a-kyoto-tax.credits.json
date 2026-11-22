@@ -1,0 +1,55 @@
+{
+ "id": "2026-11-22-a-kyoto-tax",
+ "duration": 15.6,
+ "credits": [
+  {
+   "scene": 1,
+   "query": "kyoto",
+   "pixabay_id": 298643,
+   "page": "https://pixabay.com/videos/id-298643/",
+   "user": "Kanenori",
+   "tags": "landscape, five story pagoda, buddhist temple, sunset, cloud, old capital kyoto, japan"
+  },
+  {
+   "scene": 2,
+   "query": "kyoto street",
+   "pixabay_id": 149927,
+   "page": "https://pixabay.com/videos/id-149927/",
+   "user": "Danishsiddiqui",
+   "tags": "rain, path, street, night"
+  },
+  {
+   "scene": 3,
+   "query": "kyoto temple",
+   "pixabay_id": 182475,
+   "page": "https://pixabay.com/videos/id-182475/",
+   "user": "Kanenori",
+   "tags": "night, old capital, cloud, kyoto, five storey tower, yasaka pagoda, light up, crescent moon, japan, landscape"
+  },
+  {
+   "scene": 4,
+   "query": "kyoto night",
+   "pixabay_id": 250395,
+   "page": "https://pixabay.com/videos/id-250395/",
+   "user": "Kanenori",
+   "tags": "building, castle, japanese castle, osaka castle, crescent moon, night view"
+  },
+  {
+   "scene": 5,
+   "query": "kyoto autumn",
+   "pixabay_id": 23881,
+   "page": "https://pixabay.com/videos/id-23881/",
+   "user": "Souzi-B",
+   "tags": "fall, autumn, season, nature, leaves, tree, colorful, live wallpaper"
+  },
+  {
+   "scene": 6,
+   "query": "kyoto sunset",
+   "pixabay_id": 140111,
+   "page": "https://pixabay.com/videos/id-140111/",
+   "user": "Natures_Embrace",
+   "tags": "sea, ocean, seagulls, birds, sunset, dusk, beach, paradise, flight, nature"
+  }
+ ],
+ "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"
+}
