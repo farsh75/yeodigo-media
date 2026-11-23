@@ -1,0 +1,10 @@
+{"id": "2026-11-24-b-newark-jfk", "from_item": "2026-11-24-b-instagram-1", "title": "JFK냐 뉴어크냐, 펜역까지 기차 한 장",
+ "place": ["new york", "newark", "manhattan"], "exclude": ["london", "paris"],
+ "scenes": [
+  {"query": "new york skyline night", "fallback": ["manhattan street night"], "kicker": "뉴욕 직항, 공항 고르는 분", "text": "JFK냐 뉴어크냐\n펜역까지 기차 한 장", "sub": "인천 출발 직항 · 2026년 기준"},
+  {"query": "new york airport plane", "fallback": ["new york airplane", "new york"], "text": "뉴어크 탑승률\n==77.7%==", "sub": "JFK 89.7% · 2026년 1~9월"},
+  {"query": "new york train station", "fallback": ["new york train", "manhattan"], "text": "뉴어크 → 펜역\n기차 ==$17.25==", "sub": "에어트레인 포함 · 약 30분"},
+  {"query": "new york subway", "fallback": ["manhattan subway", "new york"], "text": "JFK는 에어트레인\n==$8.75== + 지하철", "sub": "자메이카역 등에서 갈아타기"},
+  {"query": "manhattan night traffic", "fallback": ["new york night"], "text": "대한항공 뉴어크\n밤 ==11시== 도착", "sub": "2027년 5월 22일부터 매일"},
+  {"query": "new york skyline sunset", "fallback": ["manhattan sunset"], "text": "저장해 두고\n예약할 때 꺼내 보기", "sub": "여디고 · 여행 어디로 갈까?"}
+ ]}
