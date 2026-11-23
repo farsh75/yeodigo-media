@@ -63,11 +63,13 @@ def pixabay_photos(query: str, key: str, opener=urllib.request.urlopen) -> list[
 
 def candidates(hits: list[dict], need_s: float, used: set[int], place: list[str] | None = None, exclude: list[str] | None = None) -> list[dict]:
     """조건 맞는 영상을 좋은 순서로. 무료(pixabay.com)만 · 태그에 장소 이름 · 사람·차·브랜드 제외 · 충분히 긺."""
+    # 고르는 순서 (맥퀸님 2026-11-22: 세로 원본은 적어서 세로 우선이면 엉뚱한 게 뽑힘)
+    # 1) 검색 관련도(Pixabay 순서)를 5개씩 묶어 먼저  2) 그 안에서 4K 원본(자른 뒤에도 선명)  3) 좋아요
+    rank = {h.get("id"): i for i, h in enumerate(hits)}
     def score(h):
         v = (h.get("videos") or {}).get("large") or (h.get("videos") or {}).get("medium") or {}
         w, hh = v.get("width") or 0, v.get("height") or 0
-        likes, dls = h.get("likes", 0), max(1, h.get("downloads", 0))
-        return ((hh > w) * 2 + (max(w, hh) >= 1920) + (likes >= 30) + (likes / dls * 100 >= 1.5), likes, dls)
+        return (-(rank.get(h.get("id"), 99) // 5), max(w, hh) >= 3840, h.get("likes", 0) >= 30, h.get("likes", 0))
     # 무료만 (맥퀸님 2026-11-22): Pixabay 자체 콘텐츠(pixabay.com 페이지)만. 유료 스톡(iStock 등 광고 결과)은 받지 않는다.
     hits = [h for h in hits if str(h.get("pageURL", "")).startswith("https://pixabay.com/")]
     if place:  # 사실과 다른 장소 방지: 태그에 그 장소 이름이 있는 영상만 (교토 장면에 오사카성 X)
