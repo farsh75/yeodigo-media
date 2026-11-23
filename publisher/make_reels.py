@@ -134,7 +134,11 @@ def contact_sheet(rows: list, out: Path) -> None:
                 d.rectangle((x, y, x + tw, y + th), fill=(60, 60, 60))
             if h["id"] == chosen:
                 d.rectangle((x - 4, y - 4, x + tw + 4, y + th + 4), outline=(46, 204, 170), width=6)
-            d.text((x, y + th + 6), f"id {h['id']}", font=f, fill=(46, 204, 170) if h["id"] == chosen else (220, 220, 220))
+            v = (h.get("videos") or {}).get("large") or {}
+            mx = max(v.get("width") or 0, v.get("height") or 0)
+            res = "4K" if mx >= 3840 else ("2K" if mx >= 2560 else f"{mx}p" if mx else "?")
+            res += " 사진" if h.get("is_photo") else ""
+            d.text((x, y + th + 6), f"id {h['id']} · {res}", font=f, fill=(46, 204, 170) if h["id"] == chosen else ((255, 206, 84) if mx < 1920 else (220, 220, 220)))
             d.text((x, y + th + 32), str(h.get("tags", ""))[:34], font=fs, fill=(160, 160, 160))
     img.save(out, quality=85)
 
