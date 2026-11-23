@@ -1,0 +1,61 @@
+{
+ "id": "2026-11-24-b-newark-jfk",
+ "duration": 15.6,
+ "credits": [
+  {
+   "scene": 1,
+   "query": "new york skyline night",
+   "pixabay_id": 19799,
+   "page": "https://pixabay.com/videos/id-19799/",
+   "user": "Prettysleepy",
+   "tags": "water, new york, city, lights, river, lake, scene, landscape, night, portrait, skyline, nyc, manhattan, america, downtown, cityscape, bridge, brooklyn, usa, urban, evening, waterfront, skyscrapers, buildings, cinemagraph",
+   "kind": "video"
+  },
+  {
+   "scene": 2,
+   "query": "new york airport plane",
+   "pixabay_id": 42489,
+   "page": "https://pixabay.com/videos/id-42489/",
+   "user": "DesignScape",
+   "tags": "city, architecture, buildings, skyscraper, urban, skyline, cityscape, new, business, downtown, york, office, new york, tower, manhattan, night, sky, high, tall, usa, view, chicago, town",
+   "kind": "video"
+  },
+  {
+   "scene": 3,
+   "query": "new york train station",
+   "pixabay_id": 119568,
+   "page": "https://pixabay.com/videos/id-119568/",
+   "user": "Sarowar2222",
+   "tags": "subway, train, subway tracks, subway station, nyc subway, new york city subway, ny subway, subways, new york subway, subway nyc, new nyc mta subway train, new york city subway train",
+   "kind": "video"
+  },
+  {
+   "scene": 4,
+   "query": "new york subway",
+   "pixabay_id": 26115,
+   "page": "https://pixabay.com/videos/id-26115/",
+   "user": "guardiola86",
+   "tags": "new york, nyc, city, urban, manhattan, architecture, usa, skyline, buildings, america, downtown, traffic, street, road, cars",
+   "kind": "video"
+  },
+  {
+   "scene": 5,
+   "query": "manhattan night traffic",
+   "pixabay_id": 187565,
+   "page": "https://pixabay.com/videos/id-187565/",
+   "user": "santosjesus90",
+   "tags": "traffic, road, rain, night, city, lights, city life, new york, exterior, urban",
+   "kind": "video"
+  },
+  {
+   "scene": 6,
+   "query": "new york skyline sunset",
+   "pixabay_id": 231405,
+   "page": "https://pixabay.com/videos/id-231405/",
+   "user": "Edwars08",
+   "tags": "sunset, skyscraper, nyc, manhattan, city, architecture, skyline, buildings, urban",
+   "kind": "video"
+  }
+ ],
+ "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"
+}
