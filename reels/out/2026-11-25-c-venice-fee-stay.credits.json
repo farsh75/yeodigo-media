@@ -1,0 +1,61 @@
+{
+ "id": "2026-11-25-c-venice-fee-stay",
+ "duration": 15.6,
+ "credits": [
+  {
+   "scene": 1,
+   "query": "venice grand canal",
+   "pixabay_id": 68342,
+   "page": "https://pixabay.com/videos/id-68342/",
+   "user": "spalla67",
+   "tags": "building, boat, gondola, sunset, venice, italy, city, europe, venetian, grand canal, canal, tourism, italian, travel, water, architecture, cityscape, historic, landmark, vacation",
+   "kind": "video"
+  },
+  {
+   "scene": 2,
+   "query": "venice st marks square",
+   "pixabay_id": 212268,
+   "page": "https://pixabay.com/videos/id-212268/",
+   "user": "detait",
+   "tags": "venice, italy, st mark's square, doge's palace, architecture, markus tower, venezia, columns, city, historical, building, water, church tower, lagoon, boat",
+   "kind": "video"
+  },
+  {
+   "scene": 3,
+   "query": "venice bridge canal",
+   "pixabay_id": 28203,
+   "page": "https://pixabay.com/videos/id-28203/",
+   "user": "caelan",
+   "tags": "venice, travel, europe, italy, architecture, water, city, tourism, gondola, canal, building, vacations, boat, romantic, channel, old, venetian, boats, historic, bridge, facade, sunset, sky",
+   "kind": "video"
+  },
+  {
+   "scene": 4,
+   "query": "venice hotel window canal",
+   "pixabay_id": 28303,
+   "page": "https://pixabay.com/videos/id-28303/",
+   "user": "caelan",
+   "tags": "venice, street, summer, italy, architecture, city, water, canal, sky, alley, travel, cityscape, historic, old, europe, boats, building, houses, tourism, venetian",
+   "kind": "video"
+  },
+  {
+   "scene": 5,
+   "query": "venice night canal",
+   "pixabay_id": 94978,
+   "page": "https://pixabay.com/videos/id-94978/",
+   "user": "Kmeel_com",
+   "tags": "venice, night, calle, city, italy, closed, dark, street, buildings, homes, path, scrolling, movement, lights",
+   "kind": "video"
+  },
+  {
+   "scene": 6,
+   "query": "venice sunset lagoon",
+   "pixabay_id": 128984,
+   "page": "https://pixabay.com/videos/id-128984/",
+   "user": "GAPR86",
+   "tags": "sunset, gondolas, venice, italy, great channel, boat, water, landscape",
+   "kind": "video"
+  }
+ ],
+ "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"
+}
