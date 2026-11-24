@@ -1,0 +1,65 @@
+{
+  "exclude": [
+    "paris",
+    "london",
+    "las vegas",
+    "macau"
+  ],
+  "from_item": "2026-11-25-c-instagram-1",
+  "id": "2026-11-25-c-venice-fee-stay",
+  "place": [
+    "venice"
+  ],
+  "scenes": [
+    {
+      "fallback": [
+        "venice canal boats"
+      ],
+      "kicker": "내년 봄·여름 베네치아 가는 분",
+      "query": "venice grand canal",
+      "sub": "2027년 입장료 걷는 날 기준",
+      "text": "당일치기 둘이\n최대 ==20유로=="
+    },
+    {
+      "fallback": [
+        "venice crowd tourists"
+      ],
+      "query": "venice st marks square",
+      "sub": "2026년 60일 · 날짜는 보도 기준",
+      "text": "입장료 걷는 날\n==72일=="
+    },
+    {
+      "fallback": [
+        "venice rialto"
+      ],
+      "query": "venice bridge canal",
+      "sub": "그 뒤엔 10유로 · 2027년 보도",
+      "text": "5유로는\n==10일 전==까지"
+    },
+    {
+      "fallback": [
+        "venice street night"
+      ],
+      "query": "venice hotel window canal",
+      "sub": "성인 2인 · 본섬 3성급 · 입장료는 면제",
+      "text": "하룻밤 묵으면\n숙박세 ==7유로=="
+    },
+    {
+      "fallback": [
+        "venice evening lights"
+      ],
+      "query": "venice night canal",
+      "sub": "메스트레는 2.4유로 · 2~12월",
+      "text": "본섬 3성급 숙박세\n1인 ==3.5유로=="
+    },
+    {
+      "fallback": [
+        "venice gondola sunset"
+      ],
+      "query": "venice sunset lagoon",
+      "sub": "여디고 · 여행 어디로 갈까?",
+      "text": "저장해 두고\n예약할 때 꺼내 보기"
+    }
+  ],
+  "title": "베네치아 당일치기 둘이 최대 20유로, 묵으면 숙박세 7유로"
+}
