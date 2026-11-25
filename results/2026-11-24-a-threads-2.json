@@ -1,0 +1,7 @@
+{
+ "id": "2026-11-24-a-threads-2",
+ "channel": "threads",
+ "at": "2026-11-25T22:24:00.852618+00:00",
+ "status": "failed",
+ "error": "HTTP 400 https://graph.threads.net/v1.0/me/threads_publish: {\"error\":{\"message\":\"The requested resource does not exist\",\"code\":24,\"type\":\"OAuthException\",\"error_subcode\":4279009,\"is_transient\":false,\"error_user_msg\":\"The media with id 17991380607066693 cannot be found.\",\"error_user_title\":\"Media Not Found\",\"fbtrace_id\":\"ArjAa0vP_bmmiKLaoeT2WHG\"}}"
+}
