@@ -1,66 +1,74 @@
 {
-  "exclude": [
-    "tokyo",
-    "busan",
-    "osaka",
-    "hong kong"
-  ],
-  "from_item": "2026-11-26-a-instagram-1",
-  "id": "2026-11-26-a-seoul-winter",
-  "place": [
-    "seoul"
-  ],
-  "scenes": [
-    {
-      "fallback": [
-        "seoul gwanghwamun night"
-      ],
-      "kicker": "연말·1월 서울 야경 나들이 가는 분",
-      "query": "seoul night city lights",
-      "sub": "광화문 1.10 · DDP 12.17~31",
-      "text": "==1월 31일==까지 빛 축제는\n청계천 하나"
-    },
-    {
-      "fallback": [
-        "seoul palace night"
-      ],
-      "query": "seoul gwanghwamun",
-      "sub": "2025 서울윈터페스타 · 서울시 발표",
-      "text": "작년 24일 동안\n==1,098만== 명"
-    },
-    {
-      "fallback": [
-        "seoul cheonggyecheon night",
-        "lantern festival night"
-      ],
-      "query": "seoul lantern festival",
-      "sub": "12.11~1.31 · 매일 18:00부터 · 무료",
-      "text": "청계천 빛초롱\n==23시==까지"
-    },
-    {
-      "fallback": [
-        "seoul winter night street"
-      ],
-      "query": "seoul christmas lights",
-      "sub": "17:30~22:00 · 금·토 22:30까지",
-      "text": "광화문 마켓\n==1월 10일==까지"
-    },
-    {
-      "fallback": [
-        "seoul modern building night"
-      ],
-      "query": "seoul dongdaemun design plaza",
-      "sub": "다 보려면 이 기간 저녁",
-      "text": "DDP는\n==12.17~31==만"
-    },
-    {
-      "fallback": [
-        "seoul city winter"
-      ],
-      "query": "seoul skyline night",
-      "sub": "여디고 · 여행 어디로 갈까?",
-      "text": "저장해 두고\n예약할 때 꺼내 보기"
-    }
-  ],
-  "title": "서울 겨울축제, 1월 31일까지 빛 축제는 청계천 빛초롱 하나"
+ "exclude": [
+  "tokyo",
+  "busan",
+  "osaka",
+  "hong kong"
+ ],
+ "from_item": "2026-11-26-a-instagram-1",
+ "id": "2026-11-26-a-seoul-winter",
+ "place": [
+  "seoul"
+ ],
+ "scenes": [
+  {
+   "fallback": [
+    "seoul gwanghwamun night"
+   ],
+   "kicker": "연말·1월 서울 야경 나들이 가는 분",
+   "query": "seoul night city lights",
+   "sub": "광화문 1.10 · DDP 12.17~31",
+   "text": "==1월 31일==까지 빛 축제는\n청계천 하나",
+   "pixabay_id": 344181,
+   "focus_x": 0.68
+  },
+  {
+   "fallback": [
+    "seoul palace night"
+   ],
+   "query": "seoul gwanghwamun",
+   "sub": "2025 서울윈터페스타 · 서울시 발표",
+   "text": "작년 24일 동안\n==1,098만== 명",
+   "pixabay_id": 337459
+  },
+  {
+   "fallback": [
+    "seoul cheonggyecheon night",
+    "lantern festival night"
+   ],
+   "query": "seoul lantern festival",
+   "sub": "12.11~1.31 · 매일 18:00부터 · 무료",
+   "text": "청계천 빛초롱\n==23시==까지",
+   "pixabay_id": 216701
+  },
+  {
+   "fallback": [
+    "seoul winter night street"
+   ],
+   "query": "seoul christmas lights",
+   "sub": "17:30~22:00 · 금·토 22:30까지",
+   "text": "광화문 마켓\n==1월 10일==까지",
+   "pixabay_id": 141321
+  },
+  {
+   "fallback": [
+    "seoul modern building night"
+   ],
+   "query": "seoul dongdaemun design plaza",
+   "sub": "다 보려면 이 기간 저녁",
+   "text": "DDP는\n==12.17~31==만",
+   "pixabay_id": 131195
+  },
+  {
+   "fallback": [
+    "seoul city winter"
+   ],
+   "query": "seoul skyline night",
+   "sub": "여디고 · 여행 어디로 갈까?",
+   "text": "저장해 두고\n예약할 때 꺼내 보기",
+   "pixabay_id": 344205
+  }
+ ],
+ "title": "서울 겨울축제, 1월 31일까지 빛 축제는 청계천 빛초롱 하나",
+ "rev": 2
 }
