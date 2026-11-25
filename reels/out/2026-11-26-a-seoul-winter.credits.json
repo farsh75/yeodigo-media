@@ -1,0 +1,61 @@
+{
+ "id": "2026-11-26-a-seoul-winter",
+ "duration": 15.6,
+ "credits": [
+  {
+   "scene": 1,
+   "query": "seoul night city lights",
+   "pixabay_id": 163123,
+   "page": "https://pixabay.com/videos/id-163123/",
+   "user": "livesmart",
+   "tags": "cherry blossom, city, lake, seoul, lights, night view, korea, republic of korea, nature, landscape, night, spring, flower, building",
+   "kind": "video"
+  },
+  {
+   "scene": 2,
+   "query": "seoul gwanghwamun",
+   "pixabay_id": 337459,
+   "page": "https://pixabay.com/videos/id-337459/",
+   "user": "YounStudios",
+   "tags": "seoul, hangang river, yeouido, national assembly, ifc seoul, parc1, night view, hyperlapse, time-lapse, aerial view, drone footage, cityscape, urban, south korea, financial district, landmark, skyline",
+   "kind": "video"
+  },
+  {
+   "scene": 3,
+   "query": "seoul lantern festival",
+   "pixabay_id": 336755,
+   "page": "https://pixabay.com/videos/id-336755/",
+   "user": "YounStudios",
+   "tags": "seoul, hangang river, yeouido, national assembly, ifc seoul, parc1, night view, time-lapse, aerial view, drone footage, cityscape, urban, south korea, financial district, landmark, skyline",
+   "kind": "video"
+  },
+  {
+   "scene": 4,
+   "query": "seoul christmas lights",
+   "pixabay_id": 21118,
+   "page": "https://pixabay.com/videos/id-21118/",
+   "user": "RafterJr72",
+   "tags": "seoul, traffic, cars, city, speed, lights, south korea, night, outdoor, street, live wallpaper",
+   "kind": "video"
+  },
+  {
+   "scene": 5,
+   "query": "seoul dongdaemun design plaza",
+   "pixabay_id": 131195,
+   "page": "https://pixabay.com/videos/id-131195/",
+   "user": "tvchrist",
+   "tags": "sunset, sky, city, night, seoul, korea",
+   "kind": "video"
+  },
+  {
+   "scene": 6,
+   "query": "seoul skyline night",
+   "pixabay_id": 344205,
+   "page": "https://pixabay.com/videos/id-344205/",
+   "user": "YounStudios",
+   "tags": "seoul, hangang river, ttukseom hangang park, lotte world tower, night city, cityscape, skyline, aerial view, drone, hyperlapse, light trails, urban, nightscape, city lights",
+   "kind": "video"
+  }
+ ],
+ "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"
+}
