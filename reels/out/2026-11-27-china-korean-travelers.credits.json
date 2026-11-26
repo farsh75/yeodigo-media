@@ -1,0 +1,61 @@
+{
+ "id": "2026-11-27-china-korean-travelers",
+ "duration": 15.6,
+ "credits": [
+  {
+   "scene": 1,
+   "query": "shanghai skyline",
+   "pixabay_id": 267747,
+   "page": "https://pixabay.com/videos/id-267747/",
+   "user": "TungArt7",
+   "tags": "shanghai, building, china, city, landscape, finance, travel, urban, outdoor, sunset, center, asia, architecture, modern, high angle view, commerce, skyline, tourism, financial, sunrise, district, light, skyscraper, night",
+   "kind": "video"
+  },
+  {
+   "scene": 2,
+   "query": "shanghai bund",
+   "pixabay_id": 200193,
+   "page": "https://pixabay.com/videos/id-200193/",
+   "user": "D-GM",
+   "tags": "buildings, skyscrapers, city, china, aerial, drone, urban, shanghai, pudong, night, world financial centre, dji, uas, uav, tv pearl tower, bund, architecture, cityscape, river, asia, lights, panorama",
+   "kind": "video"
+  },
+  {
+   "scene": 3,
+   "query": "shanghai street",
+   "pixabay_id": 177032,
+   "page": "https://pixabay.com/videos/id-177032/",
+   "user": "D-GM",
+   "tags": "buildings, tv tower, skyscrapers, city, china, aerial, drone, urban, sunshine, park, river, water, shanghai, pudong, shanghai tv tower, pearl tower",
+   "kind": "video"
+  },
+  {
+   "scene": 4,
+   "query": "shanghai night city",
+   "pixabay_id": 177347,
+   "page": "https://pixabay.com/videos/id-177347/",
+   "user": "D-GM",
+   "tags": "buildings, skyscrapers, city, china, aerial, drone, urban, shanghai, pudong, night, world financial centre",
+   "kind": "video"
+  },
+  {
+   "scene": 5,
+   "query": "shanghai river night",
+   "pixabay_id": 198979,
+   "page": "https://pixabay.com/videos/id-198979/",
+   "user": "D-GM",
+   "tags": "buildings, skyscrapers, tv tower, city, aerial, drone, urban, sunshine, park, river, water, pudong, shanghai tv tower, pearl tower, shanghai, china",
+   "kind": "video"
+  },
+  {
+   "scene": 6,
+   "query": "shanghai sunset",
+   "pixabay_id": 267741,
+   "page": "https://pixabay.com/videos/id-267741/",
+   "user": "TungArt7",
+   "tags": "shanghai, building, china, city, landscape, finance, travel, urban, sunset, center, asia, business, famous, architecture, modern, twilight, commerce, skyline, tourism, destination, financial, sunrise, light, panorama",
+   "kind": "video"
+  }
+ ],
+ "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"
+}
