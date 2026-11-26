@@ -1,66 +1,68 @@
 {
-  "exclude": [
-    "hong kong",
-    "tokyo",
-    "singapore",
-    "taipei",
-    "seoul"
-  ],
-  "from_item": "2026-11-27-a-instagram-1",
-  "id": "2026-11-27-china-korean-travelers",
-  "place": [
-    "shanghai"
-  ],
-  "scenes": [
-    {
-      "fallback": [
-        "shanghai city"
-      ],
-      "kicker": "주말 해외여행 정하는 분",
-      "query": "shanghai skyline",
-      "sub": "1~9월 한국인 출국 · 전년 대비",
-      "text": "동남아 줄 때\n중국은 ==14.3%== 늘었다"
-    },
-    {
-      "fallback": [
-        "shanghai river"
-      ],
-      "query": "shanghai bund",
-      "sub": "1~9월 · 한국은행 보고서(보도)",
-      "text": "중국 간 한국인\n==258만 명=="
-    },
-    {
-      "fallback": [
-        "shanghai traffic"
-      ],
-      "query": "shanghai street",
-      "sub": "베트남 -10% · 전체 출국 +1.9%",
-      "text": "필리핀은\n==22.3%== 줄었다"
-    },
-    {
-      "fallback": [
-        "shanghai lights"
-      ],
-      "query": "shanghai night city",
-      "sub": "2026년 상반기 · 보도",
-      "text": "상하이 외국인 1위\n한국인 ==51.5만 명=="
-    },
-    {
-      "fallback": [
-        "shanghai tower"
-      ],
-      "query": "shanghai river night",
-      "sub": "11월 25일 기준 연장 발표 전",
-      "text": "무비자는\n==12월 31일==까지"
-    },
-    {
-      "fallback": [
-        "shanghai skyline dusk"
-      ],
-      "query": "shanghai sunset",
-      "sub": "여디고 · 여행 어디로 갈까?",
-      "text": "저장해 두고\n예약할 때 꺼내 보기"
-    }
-  ],
-  "title": "중국 간 한국인 14.3% 늘 때 필리핀 22.3% 줄었다"
+ "exclude": [
+  "hong kong",
+  "tokyo",
+  "singapore",
+  "taipei",
+  "seoul"
+ ],
+ "from_item": "2026-11-27-a-instagram-1",
+ "id": "2026-11-27-china-korean-travelers",
+ "place": [
+  "shanghai"
+ ],
+ "scenes": [
+  {
+   "fallback": [
+    "shanghai city"
+   ],
+   "kicker": "주말 해외여행 정하는 분",
+   "query": "shanghai skyline",
+   "sub": "1~9월 한국인 출국 · 전년 대비",
+   "text": "동남아 줄 때\n중국은 ==14.3%== 늘었다"
+  },
+  {
+   "fallback": [
+    "shanghai river"
+   ],
+   "query": "shanghai bund",
+   "sub": "1~9월 · 한국은행 보고서(보도)",
+   "text": "중국 간 한국인\n==258만 명=="
+  },
+  {
+   "fallback": [
+    "shanghai traffic"
+   ],
+   "query": "shanghai street",
+   "sub": "베트남 -10% · 전체 출국 +1.9%",
+   "text": "필리핀은\n==22.3%== 줄었다"
+  },
+  {
+   "fallback": [
+    "shanghai lights"
+   ],
+   "query": "shanghai night city",
+   "sub": "2026년 상반기 · 보도",
+   "text": "상하이 외국인 1위\n한국인 ==51.5만 명==",
+   "pixabay_id": 107195
+  },
+  {
+   "fallback": [
+    "shanghai tower"
+   ],
+   "query": "shanghai river night",
+   "sub": "11월 25일 기준 연장 발표 전",
+   "text": "무비자는\n==12월 31일==까지"
+  },
+  {
+   "fallback": [
+    "shanghai skyline dusk"
+   ],
+   "query": "shanghai sunset",
+   "sub": "여디고 · 여행 어디로 갈까?",
+   "text": "저장해 두고\n예약할 때 꺼내 보기"
+  }
+ ],
+ "title": "중국 간 한국인 14.3% 늘 때 필리핀 22.3% 줄었다",
+ "rev": 2
 }
