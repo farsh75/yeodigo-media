@@ -32,7 +32,8 @@
    "kicker": "2027 삿포로 눈축제 가는 분",
    "query": "sapporo snow festival",
    "sub": "2027년 2월 4~11일",
-   "text": "회장 3곳, 쓰도메는\n==16시==에 닫는다"
+   "text": "회장 3곳, 쓰도메는\n==16시==에 닫는다",
+   "pixabay_id": 2073416
   },
   {
    "fallback": [
@@ -41,7 +42,8 @@
    ],
    "query": "sapporo winter city",
    "sub": "설 연휴 2월 6~9일 · 평일은 4·5일, 10·11일",
-   "text": "축제 안에\n설 연휴 ==4일=="
+   "text": "축제 안에\n설 연휴 ==4일==",
+   "pixabay_id": 4917561
   },
   {
    "fallback": [
@@ -50,7 +52,9 @@
    ],
    "query": "sapporo snow sculpture",
    "sub": "사카에마치역 + 셔틀 · 2026년 기준",
-   "text": "낮엔 쓰도메\n==10~16시=="
+   "text": "낮엔 쓰도메\n==10~16시==",
+   "pixabay_id": 837401,
+   "focus_x": 0.35
   },
   {
    "fallback": [
@@ -59,7 +63,8 @@
    ],
    "query": "sapporo odori park night",
    "sub": "해 질 녘부터",
-   "text": "오도리 조명\n==22시==까지"
+   "text": "오도리 조명\n==22시==까지",
+   "pixabay_id": 353054
   },
   {
    "fallback": [
@@ -68,7 +73,8 @@
    ],
    "query": "sapporo susukino night",
    "sub": "마지막 날은 22시 · 2026년 기준",
-   "text": "밤엔 스스키노\n==23시==까지"
+   "text": "밤엔 스스키노\n==23시==까지",
+   "pixabay_id": 2662580
   },
   {
    "fallback": [
@@ -77,10 +83,11 @@
    ],
    "query": "sapporo snow night",
    "sub": "여디고 · 여행 어디로 갈까?",
-   "text": "저장해 두고\n예약할 때 꺼내 보기"
+   "text": "저장해 두고\n예약할 때 꺼내 보기",
+   "pixabay_id": 4848854
   }
  ],
  "title": "삿포로 눈축제 회장 3곳, 쓰도메는 16시에 닫는다",
  "media": "photo",
- "rev": 2
+ "rev": 3
 }
