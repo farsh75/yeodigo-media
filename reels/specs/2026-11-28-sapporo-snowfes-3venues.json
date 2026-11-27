@@ -5,7 +5,18 @@
   "osaka",
   "seoul",
   "harbin",
-  "quebec"
+  "quebec",
+  "spring",
+  "summer",
+  "autumn",
+  "flower",
+  "flowers",
+  "cherry blossoms",
+  "cherry blossom",
+  "plum blossom",
+  "lavender",
+  "squirrel",
+  "animal"
  ],
  "from_item": "2026-11-28-a-instagram-1",
  "id": "2026-11-28-sapporo-snowfes-3venues",
@@ -25,6 +36,7 @@
   },
   {
    "fallback": [
+    "sapporo winter",
     "sapporo snow"
    ],
    "query": "sapporo winter city",
@@ -33,7 +45,8 @@
   },
   {
    "fallback": [
-    "sapporo snow festival"
+    "sapporo ice sculpture",
+    "sapporo snow"
    ],
    "query": "sapporo snow sculpture",
    "sub": "사카에마치역 + 셔틀 · 2026년 기준",
@@ -41,7 +54,8 @@
   },
   {
    "fallback": [
-    "sapporo night"
+    "sapporo tv tower night",
+    "sapporo illumination"
    ],
    "query": "sapporo odori park night",
    "sub": "해 질 녘부터",
@@ -49,7 +63,8 @@
   },
   {
    "fallback": [
-    "sapporo night city"
+    "sapporo night",
+    "sapporo city night"
    ],
    "query": "sapporo susukino night",
    "sub": "마지막 날은 22시 · 2026년 기준",
@@ -57,12 +72,15 @@
   },
   {
    "fallback": [
-    "sapporo winter"
+    "sapporo winter",
+    "sapporo snow"
    ],
    "query": "sapporo snow night",
    "sub": "여디고 · 여행 어디로 갈까?",
    "text": "저장해 두고\n예약할 때 꺼내 보기"
   }
  ],
- "title": "삿포로 눈축제 회장 3곳, 쓰도메는 16시에 닫는다"
+ "title": "삿포로 눈축제 회장 3곳, 쓰도메는 16시에 닫는다",
+ "media": "photo",
+ "rev": 2
 }
