@@ -1,0 +1,61 @@
+{
+ "id": "2026-11-28-sapporo-snowfes-3venues",
+ "duration": 15.6,
+ "credits": [
+  {
+   "scene": 1,
+   "query": "sapporo snow festival",
+   "pixabay_id": 3971122,
+   "page": "https://pixabay.com/photos/japan-hokkaido-winter-sapporo-snow-3971122/",
+   "user": "jackmac34",
+   "tags": "japan, nature, hokkaido, winter, sapporo, snow, gel, house, blue house, blue snow",
+   "kind": "photo"
+  },
+  {
+   "scene": 2,
+   "query": "sapporo winter city",
+   "pixabay_id": 4917561,
+   "page": "https://pixabay.com/photos/japan-hokkaido-sapporo-asia-4917561/",
+   "user": "May_hokkaido",
+   "tags": "japan, hokkaido, nature, sapporo, asia, tourism, travel, city, tower, cityscape, urban, downtown, famous, landmark, sightseeing, park, bluesky, clock, lookout, winter, tree, observatory, watchtower, trip, blue clock, 大通公園",
+   "kind": "photo"
+  },
+  {
+   "scene": 3,
+   "query": "sapporo snow sculpture",
+   "pixabay_id": 837401,
+   "page": "https://pixabay.com/photos/snow-carving-snow-art-festival-837401/",
+   "user": "sharonang",
+   "tags": "snow carving, snow art, festival, yearly, sculpture, cartoon, amazing, beautiful, winter, cold, freezing, snow, ice, sapporo, hokkaido, japan, blue cartoon, sapporo, sapporo, sapporo, sapporo, sapporo",
+   "kind": "photo"
+  },
+  {
+   "scene": 4,
+   "query": "sapporo odori park night",
+   "pixabay_id": 357241,
+   "page": "https://pixabay.com/photos/japan-sapporo-urban-architecture-357241/",
+   "user": "cegoh",
+   "tags": "japan, sapporo, urban, nature, architecture, buildings, city, sky, landmark, skyscraper, trees, odori park, street",
+   "kind": "photo"
+  },
+  {
+   "scene": 5,
+   "query": "sapporo susukino night",
+   "pixabay_id": 2662580,
+   "page": "https://pixabay.com/photos/japan-sapporo-hokkaido-asia-2662580/",
+   "user": "AndyLeungHK",
+   "tags": "japan, sapporo, hokkaido, asia, landmark, city, japanese, architecture, travel, famous, tourist, scenic, night, town, night sky, historical, tourism, nature, attraction, building, sightseeing, sky, landscape, downtown, twilight, destination, skyline, scene, cityscape, brown night",
+   "kind": "photo"
+  },
+  {
+   "scene": 6,
+   "query": "sapporo snow night",
+   "pixabay_id": 4848854,
+   "page": "https://pixabay.com/photos/sapporo-clock-tower-4848854/",
+   "user": "t_watanabe",
+   "tags": "sapporo, clock tower, heritage building, snow scene, sapporo, sapporo, sapporo, sapporo, sapporo",
+   "kind": "photo"
+  }
+ ],
+ "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"
+}
