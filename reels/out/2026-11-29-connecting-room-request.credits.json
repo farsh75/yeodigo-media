@@ -1,0 +1,61 @@
+{
+ "id": "2026-11-29-connecting-room-request",
+ "duration": 15.6,
+ "credits": [
+  {
+   "scene": 1,
+   "query": "hotel corridor",
+   "pixabay_id": 151054,
+   "page": "https://pixabay.com/videos/id-151054/",
+   "user": "twmx",
+   "tags": "beach, sea, ocean, cancun, hotel, mexico, nature, sky",
+   "kind": "video"
+  },
+  {
+   "scene": 2,
+   "query": "hotel door corridor",
+   "pixabay_id": 846,
+   "page": "https://pixabay.com/videos/id-846/",
+   "user": "klimkin",
+   "tags": "library, books, the corridor, window, rack, the culture, reading, classic, new items, reading room, society, shelves, education, studies, school",
+   "kind": "video"
+  },
+  {
+   "scene": 3,
+   "query": "hotel hallway night",
+   "pixabay_id": 202877,
+   "page": "https://pixabay.com/videos/id-202877/",
+   "user": "Kanenori",
+   "tags": "mount fuji, snow, clouds, night",
+   "kind": "video"
+  },
+  {
+   "scene": 4,
+   "query": "city skyline dusk",
+   "pixabay_id": 80724,
+   "page": "https://pixabay.com/videos/id-80724/",
+   "user": "MagicTV",
+   "tags": "skyscrapers, sunset, skyline, clouds, sky, metropolis, asia, city, taiwan, live wallpaper",
+   "kind": "video"
+  },
+  {
+   "scene": 5,
+   "query": "door handle close up",
+   "pixabay_id": 30470,
+   "page": "https://pixabay.com/videos/id-30470/",
+   "user": "mike-media",
+   "tags": "bee, honey bee, insect, pollen, close up, live wallpaper",
+   "kind": "video"
+  },
+  {
+   "scene": 6,
+   "query": "hotel corridor light",
+   "pixabay_id": 20837,
+   "page": "https://pixabay.com/videos/id-20837/",
+   "user": "harambewashere2016",
+   "tags": "hallway, dark, corridor, dim, mystery, scary, path, hall, old, walls, building, decay, broken, lights, flickering, flickering lights, abandoned",
+   "kind": "video"
+  }
+ ],
+ "license": "Pixabay Content License (상업 이용·출처 표기 불필요)"
+}
