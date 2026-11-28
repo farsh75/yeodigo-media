@@ -2,10 +2,12 @@
  "exclude": [
   "hospital",
   "office",
-  "lobby",
+  "library",
   "reception",
-  "bedroom",
-  "suite"
+  "abandoned",
+  "bee",
+  "insect",
+  "flower"
  ],
  "from_item": "2026-11-29-c-instagram-1",
  "id": "2026-11-29-connecting-room-request",
@@ -13,54 +15,61 @@
  "scenes": [
   {
    "fallback": [
-    "hotel hallway",
-    "hotel doors"
+    "hotel bedroom",
+    "hotel"
    ],
    "kicker": "3대가 방 2개 붙여 잡을 분",
-   "query": "hotel corridor",
+   "query": "hotel room",
    "sub": "요청은 보장 아님 · 배정은 호텔 몫",
    "text": "커넥팅룸,\n'요청'은 보장 아님"
   },
   {
    "fallback": [
+    "hotel booking",
     "hotel corridor"
    ],
-   "query": "hotel door corridor",
+   "query": "hotel reception booking smartphone",
    "sub": "힐튼 공식 사이트·앱 · 요금은 더 높을 수 있음",
    "text": "힐튼 공식 예약은\n즉시 확정"
   },
   {
    "fallback": [
+    "hotel hallway",
     "hotel corridor"
    ],
-   "query": "hotel hallway night",
+   "query": "hotel corridor doors",
    "sub": "예약 사이트로는 이 방식 안 됨",
    "text": "한 번에 최대\n==9==개 방 연결"
   },
   {
    "fallback": [
-    "city night"
+    "hotel room beds",
+    "hotel room"
    ],
-   "query": "city skyline dusk",
+   "query": "hotel twin beds room",
    "sub": "커넥팅을 객실 타입으로 · 정원·아이 나이 확인",
    "text": "방 ==2==개를 한 상품으로\n파는 호텔도"
   },
   {
    "fallback": [
-    "hotel corridor"
+    "door handle",
+    "hotel door"
    ],
-   "query": "door handle close up",
+   "query": "hotel room door",
    "sub": "예약 화면 영어가 connecting인지 확인",
    "text": "adjoining은\n문 없는 옆방일 수도"
   },
   {
    "fallback": [
-    "hotel hallway"
+    "hotel night",
+    "hotel exterior"
    ],
-   "query": "hotel corridor light",
+   "query": "hotel building night",
    "sub": "여디고 · 여행 어디로 갈까?",
    "text": "저장해 두고\n예약할 때 꺼내 보기"
   }
  ],
- "title": "커넥팅룸, '요청'은 보장 아님"
+ "title": "커넥팅룸, '요청'은 보장 아님",
+ "media": "photo",
+ "rev": 1
 }
